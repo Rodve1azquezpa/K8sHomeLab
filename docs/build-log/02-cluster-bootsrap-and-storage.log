@@ -1,0 +1,1290 @@
+Last login: Fri Jul  3 14:02:10 on ttys003
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl 
+^C
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Jul  3 08:27:05 PM UTC 2026
+
+  System load:  0.0                Processes:              111
+  Usage of /:   43.4% of 13.67GB   Users logged in:        0
+  Memory usage: 6%                 IPv4 address for ens18: 192.168.68.101
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+27 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Fri Jul  3 19:03:09 2026 from 192.168.68.118
+cachiadmin@k8s-control:~$ sudo kuebadmin init --pod-network-cidr=192.168.0.0/16
+[sudo] password for cachiadmin: 
+sudo: kuebadmin: command not found
+cachiadmin@k8s-control:~$ sudo kuebadm init --pod-network-cidr=192.168.0.0/16
+sudo: kuebadm: command not found
+cachiadmin@k8s-control:~$ sudo kubeadm init --pod-network-cidr=192.168.0.0/16
+I0703 20:34:30.987349    7019 version.go:256] remote version is much newer: v1.36.2; falling back to: stable-1.30
+[init] Using Kubernetes version: v1.30.14
+[preflight] Running pre-flight checks
+[preflight] Pulling images required for setting up a Kubernetes cluster
+[preflight] This might take a minute or two, depending on the speed of your internet connection
+[preflight] You can also perform this action in beforehand using 'kubeadm config images pull'
+[certs] Using certificateDir folder "/etc/kubernetes/pki"
+[certs] Generating "ca" certificate and key
+[certs] Generating "apiserver" certificate and key
+[certs] apiserver serving cert is signed for DNS names [k8s-control kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 192.168.68.101]
+[certs] Generating "apiserver-kubelet-client" certificate and key
+[certs] Generating "front-proxy-ca" certificate and key
+[certs] Generating "front-proxy-client" certificate and key
+[certs] Generating "etcd/ca" certificate and key
+[certs] Generating "etcd/server" certificate and key
+[certs] etcd/server serving cert is signed for DNS names [k8s-control localhost] and IPs [192.168.68.101 127.0.0.1 ::1]
+[certs] Generating "etcd/peer" certificate and key
+[certs] etcd/peer serving cert is signed for DNS names [k8s-control localhost] and IPs [192.168.68.101 127.0.0.1 ::1]
+[certs] Generating "etcd/healthcheck-client" certificate and key
+[certs] Generating "apiserver-etcd-client" certificate and key
+[certs] Generating "sa" key and public key
+[kubeconfig] Using kubeconfig folder "/etc/kubernetes"
+[kubeconfig] Writing "admin.conf" kubeconfig file
+[kubeconfig] Writing "super-admin.conf" kubeconfig file
+[kubeconfig] Writing "kubelet.conf" kubeconfig file
+[kubeconfig] Writing "controller-manager.conf" kubeconfig file
+[kubeconfig] Writing "scheduler.conf" kubeconfig file
+[etcd] Creating static Pod manifest for local etcd in "/etc/kubernetes/manifests"
+[control-plane] Using manifest folder "/etc/kubernetes/manifests"
+[control-plane] Creating static Pod manifest for "kube-apiserver"
+[control-plane] Creating static Pod manifest for "kube-controller-manager"
+[control-plane] Creating static Pod manifest for "kube-scheduler"
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[kubelet-start] Starting the kubelet
+[wait-control-plane] Waiting for the kubelet to boot up the control plane as static Pods from directory "/etc/kubernetes/manifests"
+[kubelet-check] Waiting for a healthy kubelet at http://127.0.0.1:10248/healthz. This can take up to 4m0s
+[kubelet-check] The kubelet is healthy after 1.004073801s
+[api-check] Waiting for a healthy API server. This can take up to 4m0s
+[api-check] The API server is healthy after 10.502295302s
+[upload-config] Storing the configuration used in ConfigMap "kubeadm-config" in the "kube-system" Namespace
+[kubelet] Creating a ConfigMap "kubelet-config" in namespace kube-system with the configuration for the kubelets in the cluster
+[upload-certs] Skipping phase. Please see --upload-certs
+[mark-control-plane] Marking the node k8s-control as control-plane by adding the labels: [node-role.kubernetes.io/control-plane node.kubernetes.io/exclude-from-external-load-balancers]
+[mark-control-plane] Marking the node k8s-control as control-plane by adding the taints [node-role.kubernetes.io/control-plane:NoSchedule]
+[bootstrap-token] Using token: veor9i.ys6qfxwqatw9l6it
+[bootstrap-token] Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles
+[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to get nodes
+[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials
+[bootstrap-token] Configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
+[bootstrap-token] Configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
+[bootstrap-token] Creating the "cluster-info" ConfigMap in the "kube-public" namespace
+[kubelet-finalize] Updating "/etc/kubernetes/kubelet.conf" to point to a rotatable kubelet client certificate and key
+[addons] Applied essential addon: CoreDNS
+[addons] Applied essential addon: kube-proxy
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 192.168.68.101:6443 --token veor9i.ys6qfxwqatw9l6it \
+	--discovery-token-ca-cert-hash sha256:acbf380c69cca2325c9034f44481d7203078f8b2036bdfc5040ebb954ee0dde0 
+cachiadmin@k8s-control:~$ id -u
+1000
+cachiadmin@k8s-control:~$ id -g
+1000
+cachiadmin@k8s-control:~$ pwd
+/home/cachiadmin
+cachiadmin@k8s-control:~$   mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+cachiadmin@k8s-control:~$ kubectl get nodes
+NAME          STATUS     ROLES           AGE     VERSION
+k8s-control   NotReady   control-plane   5m56s   v1.30.14
+cachiadmin@k8s-control:~$ ls -lhrt
+total 0
+cachiadmin@k8s-control:~$ ls -lhrt /etc/k
+kernel/     kubernetes/ 
+cachiadmin@k8s-control:~$ ls -lhrt /etc/kubernetes/
+admin.conf               controller-manager.conf  kubelet.conf             manifests/               pki/                     scheduler.conf           super-admin.conf         
+cachiadmin@k8s-control:~$ ls -lhrt /etc/kubernetes/manifests/
+.kubelet-keep                 etcd.yaml                     kube-apiserver.yaml           kube-controller-manager.yaml  kube-scheduler.yaml           
+cachiadmin@k8s-control:~$ kubectl --help
+kubectl controls the Kubernetes cluster manager.
+
+ Find more information at: https://kubernetes.io/docs/reference/kubectl/
+
+Basic Commands (Beginner):
+  create          Create a resource from a file or from stdin
+  expose          Take a replication controller, service, deployment or pod and expose it as a new Kubernetes service
+  run             Run a particular image on the cluster
+  set             Set specific features on objects
+
+Basic Commands (Intermediate):
+  explain         Get documentation for a resource
+  get             Display one or many resources
+  edit            Edit a resource on the server
+  delete          Delete resources by file names, stdin, resources and names, or by resources and label selector
+
+Deploy Commands:
+  rollout         Manage the rollout of a resource
+  scale           Set a new size for a deployment, replica set, or replication controller
+  autoscale       Auto-scale a deployment, replica set, stateful set, or replication controller
+
+Cluster Management Commands:
+  certificate     Modify certificate resources
+  cluster-info    Display cluster information
+  top             Display resource (CPU/memory) usage
+  cordon          Mark node as unschedulable
+  uncordon        Mark node as schedulable
+  drain           Drain node in preparation for maintenance
+  taint           Update the taints on one or more nodes
+
+Troubleshooting and Debugging Commands:
+  describe        Show details of a specific resource or group of resources
+  logs            Print the logs for a container in a pod
+  attach          Attach to a running container
+  exec            Execute a command in a container
+  port-forward    Forward one or more local ports to a pod
+  proxy           Run a proxy to the Kubernetes API server
+  cp              Copy files and directories to and from containers
+  auth            Inspect authorization
+  debug           Create debugging sessions for troubleshooting workloads and nodes
+  events          List events
+
+Advanced Commands:
+  diff            Diff the live version against a would-be applied version
+  apply           Apply a configuration to a resource by file name or stdin
+  patch           Update fields of a resource
+  replace         Replace a resource by file name or stdin
+  wait            Experimental: Wait for a specific condition on one or many resources
+  kustomize       Build a kustomization target from a directory or URL
+
+Settings Commands:
+  label           Update the labels on a resource
+  annotate        Update the annotations on a resource
+  completion      Output shell completion code for the specified shell (bash, zsh, fish, or powershell)
+
+Subcommands provided by plugins:
+
+Other Commands:
+  api-resources   Print the supported API resources on the server
+  api-versions    Print the supported API versions on the server, in the form of "group/version"
+  config          Modify kubeconfig files
+  plugin          Provides utilities for interacting with plugins
+  version         Print the client and server version information
+
+Usage:
+  kubectl [flags] [options]
+
+Use "kubectl <command> --help" for more information about a given command.
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+cachiadmin@k8s-control:~$ kubectl explain config
+the server doesn't have a resource type "config"
+cachiadmin@k8s-control:~$ kubectl explain --help
+Describe fields and structure of various resources.
+
+ This command describes the fields associated with each supported API resource. Fields are identified via a simple
+JSONPath identifier:
+
+        <type>.<fieldName>[.<fieldName>]
+        
+ Information about each field is retrieved from the server in OpenAPI format.
+
+Use "kubectl api-resources" for a complete list of supported resources.
+
+Examples:
+  # Get the documentation of the resource and its fields
+  kubectl explain pods
+  
+  # Get all the fields in the resource
+  kubectl explain pods --recursive
+  
+  # Get the explanation for deployment in supported api versions
+  kubectl explain deployments --api-version=apps/v1
+  
+  # Get the documentation of a specific field of a resource
+  kubectl explain pods.spec.containers
+  
+  # Get the documentation of resources in different format
+  kubectl explain deployment --output=plaintext-openapiv2
+
+Options:
+    --api-version='':
+	Use given api-version (group/version) of the resource.
+
+    --output='plaintext':
+	Format in which to render the schema. Valid values are: (plaintext, plaintext-openapiv2).
+
+    --recursive=false:
+	When true, print the name of all the fields recursively. Otherwise, print the available fields with their
+	description.
+
+Usage:
+  kubectl explain TYPE [--recursive=FALSE|TRUE] [--api-version=api-version-group]
+[--output=plaintext|plaintext-openapiv2] [options]
+
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+cachiadmin@k8s-control:~$ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
+namespace/tigera-operator created
+customresourcedefinition.apiextensions.k8s.io/bgpconfigurations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/bgpfilters.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/bgppeers.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/blockaffinities.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/caliconodestatuses.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/clusterinformations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/felixconfigurations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/globalnetworkpolicies.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/globalnetworksets.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/hostendpoints.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ipamblocks.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ipamconfigs.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ipamhandles.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ippools.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/ipreservations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/kubecontrollersconfigurations.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/networkpolicies.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/networksets.crd.projectcalico.org created
+customresourcedefinition.apiextensions.k8s.io/apiservers.operator.tigera.io created
+customresourcedefinition.apiextensions.k8s.io/imagesets.operator.tigera.io created
+customresourcedefinition.apiextensions.k8s.io/installations.operator.tigera.io created
+customresourcedefinition.apiextensions.k8s.io/tigerastatuses.operator.tigera.io created
+serviceaccount/tigera-operator created
+clusterrole.rbac.authorization.k8s.io/tigera-operator created
+clusterrolebinding.rbac.authorization.k8s.io/tigera-operator created
+deployment.apps/tigera-operator created
+cachiadmin@k8s-control:~$ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml
+installation.operator.tigera.io/default created
+apiserver.operator.tigera.io/default created
+cachiadmin@k8s-control:~$ kubectl get pods
+No resources found in default namespace.
+cachiadmin@k8s-control:~$ kubectl get pods -A
+NAMESPACE         NAME                                       READY   STATUS              RESTARTS   AGE
+calico-system     calico-kube-controllers-7996795768-m8dkg   1/1     Running             0          56s
+calico-system     calico-node-qzrh8                          0/1     Running             0          47s
+calico-system     calico-typha-5bbfc6df5b-2d4gx              1/1     Running             0          56s
+calico-system     csi-node-driver-gvdrl                      0/2     ContainerCreating   0          56s
+kube-system       coredns-55cb58b774-nhlvc                   1/1     Running             0          16m
+kube-system       coredns-55cb58b774-njpq7                   1/1     Running             0          16m
+kube-system       etcd-k8s-control                           1/1     Running             0          16m
+kube-system       kube-apiserver-k8s-control                 1/1     Running             0          16m
+kube-system       kube-controller-manager-k8s-control        1/1     Running             0          16m
+kube-system       kube-proxy-6mlrq                           1/1     Running             0          16m
+kube-system       kube-scheduler-k8s-control                 1/1     Running             0          16m
+tigera-operator   tigera-operator-76ff79f7fd-pdfzp           1/1     Running             0          66s
+cachiadmin@k8s-control:~$ kubectl get pods -n calico-system -w
+NAME                                       READY   STATUS    RESTARTS   AGE
+calico-kube-controllers-7996795768-m8dkg   1/1     Running   0          76s
+calico-node-qzrh8                          1/1     Running   0          67s
+calico-typha-5bbfc6df5b-2d4gx              1/1     Running   0          76s
+csi-node-driver-gvdrl                      2/2     Running   0          76s
+^Ccachiadmin@k8s-control:~$ kubectl get nodes
+NAME          STATUS   ROLES           AGE   VERSION
+k8s-control   Ready    control-plane   17m   v1.30.14
+cachiadmin@k8s-control:~$ ssh k8s-worker1
+ssh: Could not resolve hostname k8s-worker1: Temporary failure in name resolution
+cachiadmin@k8s-control:~$ ssh 192.168.113
+^C
+cachiadmin@k8s-control:~$ exit
+logout
+Connection to 192.168.68.101 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clw1
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Jul  3 08:54:10 PM UTC 2026
+
+  System load:  0.0                Processes:              111
+  Usage of /:   43.4% of 13.67GB   Users logged in:        1
+  Memory usage: 7%                 IPv4 address for ens18: 192.168.68.113
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+27 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Thu Jul  2 20:10:21 2026 from 192.168.68.111
+cachiadmin@k8s-worker1:~$ kubeadm join 192.168.68.101:6443 --token veor9i.ys6qfxwqatw9l6it \
+        --discovery-token-ca-cert-hash sha256:acbf380c69cca2325c9034f44481d7203078f8b2036bdfc5040ebb954ee0dde0 
+[preflight] Running pre-flight checks
+error execution phase preflight: [preflight] Some fatal errors occurred:
+	[ERROR IsPrivilegedUser]: user is not running as root
+[preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
+To see the stack trace of this error execute with --v=5 or higher
+cachiadmin@k8s-worker1:~$ sudo kubeadm join 192.168.68.101:6443 --token veor9i.ys6qfxwqatw9l6it \
+        --discovery-token-ca-cert-hash sha256:acbf380c69cca2325c9034f44481d7203078f8b2036bdfc5040ebb954ee0dde0 
+[sudo] password for cachiadmin: 
+[preflight] Running pre-flight checks
+[preflight] Reading configuration from the cluster...
+[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[kubelet-start] Starting the kubelet
+[kubelet-check] Waiting for a healthy kubelet at http://127.0.0.1:10248/healthz. This can take up to 4m0s
+[kubelet-check] The kubelet is healthy after 502.986001ms
+[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap
+
+This node has joined the cluster:
+* Certificate signing request was sent to apiserver and a response was received.
+* The Kubelet was informed of the new secure connection details.
+
+Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
+
+cachiadmin@k8s-worker1:~$ exit
+logout
+Connection to 192.168.68.113 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clw2
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Jul  3 08:55:47 PM UTC 2026
+
+  System load:  0.08               Processes:              110
+  Usage of /:   43.4% of 13.67GB   Users logged in:        1
+  Memory usage: 6%                 IPv4 address for ens18: 192.168.68.115
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+28 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Thu Jul  2 20:11:49 2026 from 192.168.68.111
+cachiadmin@k8s-worker2:~$ sudo kubeadm join 192.168.68.101:6443 --token veor9i.ys6qfxwqatw9l6it \
+        --discovery-token-ca-cert-hash sha256:acbf380c69cca2325c9034f44481d7203078f8b2036bdfc5040ebb954ee0dde0 
+[sudo] password for cachiadmin: 
+[preflight] Running pre-flight checks
+[preflight] Reading configuration from the cluster...
+[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[kubelet-start] Starting the kubelet
+[kubelet-check] Waiting for a healthy kubelet at http://127.0.0.1:10248/healthz. This can take up to 4m0s
+[kubelet-check] The kubelet is healthy after 1.531850212s
+[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap
+
+This node has joined the cluster:
+* Certificate signing request was sent to apiserver and a response was received.
+* The Kubelet was informed of the new secure connection details.
+
+Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
+
+cachiadmin@k8s-worker2:~$ exit
+logout
+Connection to 192.168.68.115 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Jul  3 08:56:14 PM UTC 2026
+
+  System load:  0.32               Processes:              206
+  Usage of /:   59.4% of 13.67GB   Users logged in:        0
+  Memory usage: 32%                IPv4 address for ens18: 192.168.68.101
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+27 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Fri Jul  3 20:27:06 2026 from 192.168.68.118
+cachiadmin@k8s-control:~$ kubectl get nodes
+NAME          STATUS   ROLES           AGE   VERSION
+k8s-control   Ready    control-plane   21m   v1.30.14
+k8s-worker1   Ready    <none>          56s   v1.30.14
+k8s-worker2   Ready    <none>          28s   v1.30.14
+cachiadmin@k8s-control:~$ exit
+logout
+Connection to 192.168.68.101 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clsrv 
+Linux pve 7.0.2-6-pve #1 SMP PREEMPT_DYNAMIC PMX 7.0.2-6 (2026-05-20T08:55Z) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Fri Jul  3 13:05:31 2026 from 192.168.68.118
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+root@pve:~# exit
+logout
+Connection to 192.168.68.114 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Jul  3 09:16:17 PM UTC 2026
+
+  System load:  0.1                Processes:              200
+  Usage of /:   59.4% of 13.67GB   Users logged in:        0
+  Memory usage: 31%                IPv4 address for ens18: 192.168.68.101
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+27 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Fri Jul  3 20:56:16 2026 from 192.168.68.118
+cachiadmin@k8s-control:~$ kube
+kubeadm  kubectl  kubelet  
+cachiadmin@k8s-control:~$ kubectl get nodes
+NAME          STATUS   ROLES           AGE   VERSION
+k8s-control   Ready    control-plane   41m   v1.30.14
+k8s-worker1   Ready    <none>          20m   v1.30.14
+k8s-worker2   Ready    <none>          20m   v1.30.14
+cachiadmin@k8s-control:~$ kubectl get nodes -o wide
+NAME          STATUS   ROLES           AGE   VERSION    INTERNAL-IP      EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+k8s-control   Ready    control-plane   41m   v1.30.14   192.168.68.101   <none>        Ubuntu 24.04.4 LTS   6.8.0-134-generic   containerd://2.2.5
+k8s-worker1   Ready    <none>          21m   v1.30.14   192.168.68.113   <none>        Ubuntu 24.04.4 LTS   6.8.0-134-generic   containerd://2.2.5
+k8s-worker2   Ready    <none>          20m   v1.30.14   192.168.68.115   <none>        Ubuntu 24.04.4 LTS   6.8.0-134-generic   containerd://2.2.5
+cachiadmin@k8s-control:~$ exit
+logout
+Connection to 192.168.68.101 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clsrv 
+Linux pve 7.0.2-6-pve #1 SMP PREEMPT_DYNAMIC PMX 7.0.2-6 (2026-05-20T08:55Z) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Fri Jul  3 15:07:53 2026 from 192.168.68.118
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+root@pve:~# apt update && apt install -y nfs-kernel-server
+Hit:1 http://deb.debian.org/debian trixie InRelease
+Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]           
+Get:3 http://security.debian.org/debian-security trixie-security InRelease [43.4 kB]                              
+Get:4 http://security.debian.org/debian-security trixie-security/main amd64 Packages [223 kB]
+Err:5 https://enterprise.proxmox.com/debian/ceph-squid trixie InRelease
+  401  Unauthorized [IP: 95.133.229.241 443]
+Err:6 https://enterprise.proxmox.com/debian/pve trixie InRelease
+  401  Unauthorized [IP: 95.133.229.241 443]
+Error: Failed to fetch https://enterprise.proxmox.com/debian/ceph-squid/dists/trixie/InRelease  401  Unauthorized [IP: 95.133.229.241 443]
+Error: The repository 'https://enterprise.proxmox.com/debian/ceph-squid trixie InRelease' is not signed.
+Notice: Updating from such a repository can't be done securely, and is therefore disabled by default.
+Notice: See apt-secure(8) manpage for repository creation and user configuration details.
+Error: Failed to fetch https://enterprise.proxmox.com/debian/pve/dists/trixie/InRelease  401  Unauthorized [IP: 95.133.229.241 443]
+Error: The repository 'https://enterprise.proxmox.com/debian/pve trixie InRelease' is not signed.
+Notice: Updating from such a repository can't be done securely, and is therefore disabled by default.
+Notice: See apt-secure(8) manpage for repository creation and user configuration details.
+root@pve:~# ls -lhrt /etc/apt/
+apt.conf.d/         auth.conf.d/        keyrings/           listchanges.conf    listchanges.conf.d/ preferences.d/      sources.list.d/     trusted.gpg.d/      
+root@pve:~# ls -lhrt /etc/apt/sources.list.d/
+total 12K
+-rw-r--r-- 1 root root 160 May 21 05:20 pve-enterprise.sources
+-rw-r--r-- 1 root root 365 May 21 05:32 debian.sources
+-rw-r--r-- 1 root root 163 May 21 05:32 ceph.sources
+root@pve:~# sed -i 's/^deb/#deb/g' /etc/apt/sources.list.d/pve-enterprise.sources 
+root@pve:~# cat /etc/apt/sources.list.d/pve-enterprise.sources
+Types: deb
+URIs: https://enterprise.proxmox.com/debian/pve
+Suites: trixie
+Components: pve-enterprise
+Signed-By: /usr/share/keyrings/proxmox-archive-keyring.gpg
+root@pve:~# echo "deb http://download.proxmox.com/debian/pve trixie pve-no-subscription" > /etc/apt/sources.list.d/pve-no-subscription.list
+root@pve:~# echo "deb http://download.proxmox.com/debian/ceph-squid trixie no-subscription" > /etc/apt/sources.list.d/ceph-no-subscription.list
+root@pve:~# apt update && apt install -y nfs-kernel-server
+Hit:1 http://security.debian.org/debian-security trixie-security InRelease
+Hit:2 http://deb.debian.org/debian trixie InRelease                             
+Hit:3 http://deb.debian.org/debian trixie-updates InRelease                     
+Get:4 http://download.proxmox.com/debian/ceph-squid trixie InRelease [2736 B]
+Get:5 http://download.proxmox.com/debian/pve trixie InRelease [3534 B]
+Get:6 http://download.proxmox.com/debian/ceph-squid trixie/no-subscription amd64 Packages [51.7 kB]
+Get:7 http://download.proxmox.com/debian/pve trixie/pve-no-subscription amd64 Packages [484 kB]
+Fetched 542 kB in 1s (378 kB/s)  
+79 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Installing:                     
+  nfs-kernel-server
+
+Installing dependencies:
+  libnl-genl-3-200
+
+Summary:
+  Upgrading: 0, Installing: 2, Removing: 0, Not Upgrading: 79
+  Download size: 207 kB
+  Space needed: 862 kB / 17.8 GB available
+
+Get:1 http://deb.debian.org/debian trixie/main amd64 libnl-genl-3-200 amd64 3.7.0-2 [18.1 kB]
+Get:2 http://deb.debian.org/debian trixie/main amd64 nfs-kernel-server amd64 1:2.8.3-1 [189 kB]
+Fetched 207 kB in 0s (2894 kB/s)          
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = "UTF-8",
+	LC_NUMERIC = (unset),
+	LC_COLLATE = (unset),
+	LC_TIME = (unset),
+	LC_MESSAGES = (unset),
+	LC_MONETARY = (unset),
+	LC_ADDRESS = (unset),
+	LC_IDENTIFICATION = (unset),
+	LC_MEASUREMENT = (unset),
+	LC_PAPER = (unset),
+	LC_TELEPHONE = (unset),
+	LC_NAME = (unset),
+	LANG = "en_US.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("en_US.UTF-8").
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = "UTF-8",
+	LC_NUMERIC = (unset),
+	LC_COLLATE = (unset),
+	LC_TIME = (unset),
+	LC_MESSAGES = (unset),
+	LC_MONETARY = (unset),
+	LC_ADDRESS = (unset),
+	LC_IDENTIFICATION = (unset),
+	LC_MEASUREMENT = (unset),
+	LC_PAPER = (unset),
+	LC_TELEPHONE = (unset),
+	LC_NAME = (unset),
+	LANG = "en_US.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("en_US.UTF-8").
+locale: Cannot set LC_CTYPE to default locale: No such file or directory
+locale: Cannot set LC_ALL to default locale: No such file or directory
+Selecting previously unselected package libnl-genl-3-200:amd64.
+(Reading database ... 52492 files and directories currently installed.)
+Preparing to unpack .../libnl-genl-3-200_3.7.0-2_amd64.deb ...
+Unpacking libnl-genl-3-200:amd64 (3.7.0-2) ...
+Selecting previously unselected package nfs-kernel-server.
+Preparing to unpack .../nfs-kernel-server_1%3a2.8.3-1_amd64.deb ...
+Unpacking nfs-kernel-server (1:2.8.3-1) ...
+Setting up libnl-genl-3-200:amd64 (3.7.0-2) ...
+Setting up nfs-kernel-server (1:2.8.3-1) ...
+Created symlink '/etc/systemd/system/nfs-mountd.service.requires/fsidd.service' → '/usr/lib/systemd/system/fsidd.service'.
+Created symlink '/etc/systemd/system/nfs-server.service.requires/fsidd.service' → '/usr/lib/systemd/system/fsidd.service'.
+Created symlink '/etc/systemd/system/multi-user.target.wants/nfs-server.service' → '/usr/lib/systemd/system/nfs-server.service'.
+nfs-mountd.service is a disabled or a static unit, not starting it.
+nfsdcld.service is a disabled or a static unit, not starting it.
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = "UTF-8",
+	LC_NUMERIC = (unset),
+	LC_COLLATE = (unset),
+	LC_TIME = (unset),
+	LC_MESSAGES = (unset),
+	LC_MONETARY = (unset),
+	LC_ADDRESS = (unset),
+	LC_IDENTIFICATION = (unset),
+	LC_MEASUREMENT = (unset),
+	LC_PAPER = (unset),
+	LC_TELEPHONE = (unset),
+	LC_NAME = (unset),
+	LANG = "en_US.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("en_US.UTF-8").
+locale: Cannot set LC_CTYPE to default locale: No such file or directory
+locale: Cannot set LC_ALL to default locale: No such file or directory
+Creating config file /etc/exports with new version
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = "UTF-8",
+	LC_NUMERIC = (unset),
+	LC_COLLATE = (unset),
+	LC_TIME = (unset),
+	LC_MESSAGES = (unset),
+	LC_MONETARY = (unset),
+	LC_ADDRESS = (unset),
+	LC_IDENTIFICATION = (unset),
+	LC_MEASUREMENT = (unset),
+	LC_PAPER = (unset),
+	LC_TELEPHONE = (unset),
+	LC_NAME = (unset),
+	LANG = "en_US.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("en_US.UTF-8").
+locale: Cannot set LC_CTYPE to default locale: No such file or directory
+locale: Cannot set LC_ALL to default locale: No such file or directory
+Creating config file /etc/default/nfs-kernel-server with new version
+Processing triggers for man-db (2.13.1-1) ...
+Processing triggers for libc-bin (2.41-12+deb13u3) ...
+root@pve:~# 
+root@pve:~# 
+root@pve:~# cat <<EOF >> /etc/exports
+/mnt/pve/media-drive 192.168.0.0/16(rw,sync,no_subtree_check,no_root_squash)
+EOF^C
+root@pve:~# less /mnt/pve/media-drive/
+dump/       images/     lost+found/ private/    snippets/   template/   
+root@pve:~# less /mnt/pve/media-drive
+/mnt/pve/media-drive is a directory
+root@pve:~# cat <<EOF >> /etc/exports
+/mnt/pve/media-drive 192.168.0.0/16(rw,sync,no_subtree_check,no_root_squash)
+EOF
+root@pve:~# less /mnt/pve/media-drive
+/mnt/pve/media-drive is a directory
+root@pve:~# less /mnt/pve/media-drive/
+dump/       images/     lost+found/ private/    snippets/   template/   
+root@pve:~# less /mnt/pve/media-drive/
+dump/       images/     lost+found/ private/    snippets/   template/   
+root@pve:~# less /etc/exports 
+root@pve:~# less /mnt/pve/
+media-drive/ nas-drive1/  nas-drive2/  
+root@pve:~# cat <<EOF >> /etc/exports
+/mnt/pve/nas-drive1 192.168.0.0/16(rw,sync,no_subtree_check,no_root_squash)
+EOF
+root@pve:~# cat <<EOF >> /etc/exports
+/mnt/pve/nas-drive2 192.168.0.0/16(rw,sync,no_subtree_check,no_root_squash)
+EOF
+root@pve:~# exportfs -arv
+exporting 192.168.0.0/16:/mnt/pve/nas-drive2
+exporting 192.168.0.0/16:/mnt/pve/nas-drive1
+exporting 192.168.0.0/16:/mnt/pve/media-drive
+root@pve:~# systemctl restart nfs-kernel-server
+root@pve:~# exit
+logout
+Connection to 192.168.68.114 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Jul  3 09:51:57 PM UTC 2026
+
+  System load:  0.07               Processes:              200
+  Usage of /:   59.4% of 13.67GB   Users logged in:        0
+  Memory usage: 31%                IPv4 address for ens18: 192.168.68.101
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+27 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Fri Jul  3 21:16:17 2026 from 192.168.68.118
+cachiadmin@k8s-control:~$ sudo apt update
+[sudo] password for cachiadmin: 
+Hit:1 https://download.docker.com/linux/ubuntu noble InRelease
+Get:2 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Hit:4 http://archive.ubuntu.com/ubuntu noble InRelease                         
+Get:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]       
+Hit:3 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.30/deb  InRelease
+Hit:6 http://archive.ubuntu.com/ubuntu noble-backports InRelease                         
+Get:7 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [825 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1077 kB]
+Get:9 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [17.7 kB]
+Get:10 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1196 kB]
+Get:11 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1658 kB]
+Get:12 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [34.9 kB]
+Fetched 5061 kB in 2s (2631 kB/s)                                 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+29 packages can be upgraded. Run 'apt list --upgradable' to see them.
+cachiadmin@k8s-control:~$ sudo apt install -y nfs-common
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  keyutils libnfsidmap1 rpcbind
+Suggested packages:
+  watchdog
+The following NEW packages will be installed:
+  keyutils libnfsidmap1 nfs-common rpcbind
+0 upgraded, 4 newly installed, 0 to remove and 29 not upgraded.
+Need to get 400 kB of archives.
+After this operation, 1416 kB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libnfsidmap1 amd64 1:2.6.4-3ubuntu5.1 [48.3 kB]
+Get:2 http://archive.ubuntu.com/ubuntu noble/main amd64 rpcbind amd64 1.2.6-7ubuntu2 [46.5 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble/main amd64 keyutils amd64 1.6.3-3build1 [56.8 kB]
+Get:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 nfs-common amd64 1:2.6.4-3ubuntu5.1 [248 kB]
+Fetched 400 kB in 0s (1593 kB/s)  
+Selecting previously unselected package libnfsidmap1:amd64.
+(Reading database ... 88332 files and directories currently installed.)
+Preparing to unpack .../libnfsidmap1_1%3a2.6.4-3ubuntu5.1_amd64.deb ...
+Unpacking libnfsidmap1:amd64 (1:2.6.4-3ubuntu5.1) ...
+Selecting previously unselected package rpcbind.
+Preparing to unpack .../rpcbind_1.2.6-7ubuntu2_amd64.deb ...
+Unpacking rpcbind (1.2.6-7ubuntu2) ...
+Selecting previously unselected package keyutils.
+Preparing to unpack .../keyutils_1.6.3-3build1_amd64.deb ...
+Unpacking keyutils (1.6.3-3build1) ...
+Selecting previously unselected package nfs-common.
+Preparing to unpack .../nfs-common_1%3a2.6.4-3ubuntu5.1_amd64.deb ...
+Unpacking nfs-common (1:2.6.4-3ubuntu5.1) ...
+Setting up libnfsidmap1:amd64 (1:2.6.4-3ubuntu5.1) ...
+Setting up rpcbind (1.2.6-7ubuntu2) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/rpcbind.service → /usr/lib/systemd/system/rpcbind.service.
+Created symlink /etc/systemd/system/sockets.target.wants/rpcbind.socket → /usr/lib/systemd/system/rpcbind.socket.
+Setting up keyutils (1.6.3-3build1) ...
+Setting up nfs-common (1:2.6.4-3ubuntu5.1) ...
+
+Creating config file /etc/idmapd.conf with new version
+
+Creating config file /etc/nfs.conf with new version
+info: Selecting UID from range 100 to 999 ...
+
+info: Adding system user `statd' (UID 111) ...
+info: Adding new user `statd' (UID 111) with group `nogroup' ...
+info: Not creating home directory `/var/lib/nfs'.
+Created symlink /etc/systemd/system/multi-user.target.wants/nfs-client.target → /usr/lib/systemd/system/nfs-client.target.
+Created symlink /etc/systemd/system/remote-fs.target.wants/nfs-client.target → /usr/lib/systemd/system/nfs-client.target.
+auth-rpcgss-module.service is a disabled or a static unit, not starting it.
+nfs-idmapd.service is a disabled or a static unit, not starting it.
+nfs-utils.service is a disabled or a static unit, not starting it.
+proc-fs-nfsd.mount is a disabled or a static unit, not starting it.
+rpc-gssd.service is a disabled or a static unit, not starting it.
+rpc-statd-notify.service is a disabled or a static unit, not starting it.
+rpc-statd.service is a disabled or a static unit, not starting it.
+rpc-svcgssd.service is a disabled or a static unit, not starting it.
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.7) ...
+Scanning processes...                                                                                                                                                                                                                                                                      
+Scanning linux images...                                                                                                                                                                                                                                                                   
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+cachiadmin@k8s-control:~$ exit
+logout
+Connection to 192.168.68.101 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clw1
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Jul  3 09:53:31 PM UTC 2026
+
+  System load:  0.08               Processes:              170
+  Usage of /:   51.6% of 13.67GB   Users logged in:        1
+  Memory usage: 13%                IPv4 address for ens18: 192.168.68.113
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+27 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Fri Jul  3 20:54:10 2026 from 192.168.68.118
+cachiadmin@k8s-worker1:~$ sudp apt update
+Command 'sudp' not found, did you mean:
+  command 'sfdp' from deb graphviz (2.42.2-9ubuntu0.1)
+  command 'sup' from deb sup (20100519-3)
+  command 'sudo' from deb sudo (1.9.15p5-3ubuntu5.24.04.2)
+  command 'sudo' from deb sudo-ldap (1.9.15p5-3ubuntu5.24.04.2)
+Try: sudo apt install <deb name>
+cachiadmin@k8s-worker1:~$ sudo apt update
+[sudo] password for cachiadmin: 
+Hit:2 http://archive.ubuntu.com/ubuntu noble InRelease                                          
+Get:3 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]                       
+Hit:4 https://download.docker.com/linux/ubuntu noble InRelease                                                          
+Get:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]                                                 
+Hit:1 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.30/deb  InRelease
+Hit:6 http://archive.ubuntu.com/ubuntu noble-backports InRelease                          
+Get:7 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [825 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1077 kB]
+Get:9 http://archive.ubuntu.com/ubuntu noble-updates/main Translation-en [267 kB]
+Get:10 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [17.7 kB]
+Get:11 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1196 kB]
+Get:12 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1658 kB]
+Get:13 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [34.9 kB]
+Fetched 5329 kB in 2s (2910 kB/s)                            
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+29 packages can be upgraded. Run 'apt list --upgradable' to see them.
+cachiadmin@k8s-worker1:~$ sudo apt install -y nfs-common
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  keyutils libnfsidmap1 rpcbind
+Suggested packages:
+  watchdog
+The following NEW packages will be installed:
+  keyutils libnfsidmap1 nfs-common rpcbind
+0 upgraded, 4 newly installed, 0 to remove and 29 not upgraded.
+Need to get 400 kB of archives.
+After this operation, 1416 kB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libnfsidmap1 amd64 1:2.6.4-3ubuntu5.1 [48.3 kB]
+Get:2 http://archive.ubuntu.com/ubuntu noble/main amd64 rpcbind amd64 1.2.6-7ubuntu2 [46.5 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble/main amd64 keyutils amd64 1.6.3-3build1 [56.8 kB]
+Get:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 nfs-common amd64 1:2.6.4-3ubuntu5.1 [248 kB]
+Fetched 400 kB in 0s (1580 kB/s)   
+Selecting previously unselected package libnfsidmap1:amd64.
+(Reading database ... 88332 files and directories currently installed.)
+Preparing to unpack .../libnfsidmap1_1%3a2.6.4-3ubuntu5.1_amd64.deb ...
+Unpacking libnfsidmap1:amd64 (1:2.6.4-3ubuntu5.1) ...
+Selecting previously unselected package rpcbind.
+Preparing to unpack .../rpcbind_1.2.6-7ubuntu2_amd64.deb ...
+Unpacking rpcbind (1.2.6-7ubuntu2) ...
+Selecting previously unselected package keyutils.
+Preparing to unpack .../keyutils_1.6.3-3build1_amd64.deb ...
+Unpacking keyutils (1.6.3-3build1) ...
+Selecting previously unselected package nfs-common.
+Preparing to unpack .../nfs-common_1%3a2.6.4-3ubuntu5.1_amd64.deb ...
+Unpacking nfs-common (1:2.6.4-3ubuntu5.1) ...
+Setting up libnfsidmap1:amd64 (1:2.6.4-3ubuntu5.1) ...
+Setting up rpcbind (1.2.6-7ubuntu2) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/rpcbind.service → /usr/lib/systemd/system/rpcbind.service.
+Created symlink /etc/systemd/system/sockets.target.wants/rpcbind.socket → /usr/lib/systemd/system/rpcbind.socket.
+Setting up keyutils (1.6.3-3build1) ...
+Setting up nfs-common (1:2.6.4-3ubuntu5.1) ...
+
+Creating config file /etc/idmapd.conf with new version
+
+Creating config file /etc/nfs.conf with new version
+info: Selecting UID from range 100 to 999 ...
+
+info: Adding system user `statd' (UID 111) ...
+info: Adding new user `statd' (UID 111) with group `nogroup' ...
+info: Not creating home directory `/var/lib/nfs'.
+Created symlink /etc/systemd/system/multi-user.target.wants/nfs-client.target → /usr/lib/systemd/system/nfs-client.target.
+Created symlink /etc/systemd/system/remote-fs.target.wants/nfs-client.target → /usr/lib/systemd/system/nfs-client.target.
+auth-rpcgss-module.service is a disabled or a static unit, not starting it.
+nfs-idmapd.service is a disabled or a static unit, not starting it.
+nfs-utils.service is a disabled or a static unit, not starting it.
+proc-fs-nfsd.mount is a disabled or a static unit, not starting it.
+rpc-gssd.service is a disabled or a static unit, not starting it.
+rpc-statd-notify.service is a disabled or a static unit, not starting it.
+rpc-statd.service is a disabled or a static unit, not starting it.
+rpc-svcgssd.service is a disabled or a static unit, not starting it.
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.7) ...
+Scanning processes...                                                                                                                                                                                                                                                                      
+Scanning linux images...                                                                                                                                                                                                                                                                   
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+cachiadmin@k8s-worker1:~$ exit
+logout
+Connection to 192.168.68.113 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clw2
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Jul  3 09:56:22 PM UTC 2026
+
+  System load:  0.07               Processes:              166
+  Usage of /:   50.9% of 13.67GB   Users logged in:        1
+  Memory usage: 13%                IPv4 address for ens18: 192.168.68.115
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+28 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Fri Jul  3 20:55:48 2026 from 192.168.68.118
+cachiadmin@k8s-worker2:~$ sudo apt update
+[sudo] password for cachiadmin: 
+Hit:1 https://download.docker.com/linux/ubuntu noble InRelease
+Hit:3 http://archive.ubuntu.com/ubuntu noble InRelease              
+Get:4 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]                           
+Hit:2 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.30/deb  InRelease                   
+Hit:6 http://archive.ubuntu.com/ubuntu noble-backports InRelease                                                          
+Get:7 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1077 kB]
+Get:8 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [825 kB]
+Get:9 http://archive.ubuntu.com/ubuntu noble-updates/main Translation-en [267 kB]
+Get:10 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [17.7 kB]      
+Get:11 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1196 kB]
+Get:12 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1658 kB]
+Get:13 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [34.9 kB]
+Fetched 5329 kB in 2s (2796 kB/s) 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+29 packages can be upgraded. Run 'apt list --upgradable' to see them.
+cachiadmin@k8s-worker2:~$ sudo apt install -y nfs-common
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  keyutils libnfsidmap1 rpcbind
+Suggested packages:
+  watchdog
+The following NEW packages will be installed:
+  keyutils libnfsidmap1 nfs-common rpcbind
+0 upgraded, 4 newly installed, 0 to remove and 29 not upgraded.
+Need to get 400 kB of archives.
+After this operation, 1416 kB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libnfsidmap1 amd64 1:2.6.4-3ubuntu5.1 [48.3 kB]
+Get:2 http://archive.ubuntu.com/ubuntu noble/main amd64 rpcbind amd64 1.2.6-7ubuntu2 [46.5 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble/main amd64 keyutils amd64 1.6.3-3build1 [56.8 kB]
+Get:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 nfs-common amd64 1:2.6.4-3ubuntu5.1 [248 kB]
+Fetched 400 kB in 0s (1554 kB/s)   
+Selecting previously unselected package libnfsidmap1:amd64.
+(Reading database ... 88332 files and directories currently installed.)
+Preparing to unpack .../libnfsidmap1_1%3a2.6.4-3ubuntu5.1_amd64.deb ...
+Unpacking libnfsidmap1:amd64 (1:2.6.4-3ubuntu5.1) ...
+Selecting previously unselected package rpcbind.
+Preparing to unpack .../rpcbind_1.2.6-7ubuntu2_amd64.deb ...
+Unpacking rpcbind (1.2.6-7ubuntu2) ...
+Selecting previously unselected package keyutils.
+Preparing to unpack .../keyutils_1.6.3-3build1_amd64.deb ...
+Unpacking keyutils (1.6.3-3build1) ...
+Selecting previously unselected package nfs-common.
+Preparing to unpack .../nfs-common_1%3a2.6.4-3ubuntu5.1_amd64.deb ...
+Unpacking nfs-common (1:2.6.4-3ubuntu5.1) ...
+Setting up libnfsidmap1:amd64 (1:2.6.4-3ubuntu5.1) ...
+Setting up rpcbind (1.2.6-7ubuntu2) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/rpcbind.service → /usr/lib/systemd/system/rpcbind.service.
+Created symlink /etc/systemd/system/sockets.target.wants/rpcbind.socket → /usr/lib/systemd/system/rpcbind.socket.
+Setting up keyutils (1.6.3-3build1) ...
+Setting up nfs-common (1:2.6.4-3ubuntu5.1) ...
+
+Creating config file /etc/idmapd.conf with new version
+
+Creating config file /etc/nfs.conf with new version
+info: Selecting UID from range 100 to 999 ...
+
+info: Adding system user `statd' (UID 111) ...
+info: Adding new user `statd' (UID 111) with group `nogroup' ...
+info: Not creating home directory `/var/lib/nfs'.
+Created symlink /etc/systemd/system/multi-user.target.wants/nfs-client.target → /usr/lib/systemd/system/nfs-client.target.
+Created symlink /etc/systemd/system/remote-fs.target.wants/nfs-client.target → /usr/lib/systemd/system/nfs-client.target.
+auth-rpcgss-module.service is a disabled or a static unit, not starting it.
+nfs-idmapd.service is a disabled or a static unit, not starting it.
+nfs-utils.service is a disabled or a static unit, not starting it.
+proc-fs-nfsd.mount is a disabled or a static unit, not starting it.
+rpc-gssd.service is a disabled or a static unit, not starting it.
+rpc-statd-notify.service is a disabled or a static unit, not starting it.
+rpc-statd.service is a disabled or a static unit, not starting it.
+rpc-svcgssd.service is a disabled or a static unit, not starting it.
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.7) ...
+Scanning processes...                                                                                                                                                                                                                                                                      
+Scanning linux images...                                                                                                                                                                                                                                                                   
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+cachiadmin@k8s-worker2:~$ exit
+logout
+Connection to 192.168.68.115 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Jul  3 09:57:51 PM UTC 2026
+
+  System load:  0.06               Processes:              204
+  Usage of /:   59.4% of 13.67GB   Users logged in:        0
+  Memory usage: 31%                IPv4 address for ens18: 192.168.68.101
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+28 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Fri Jul  3 21:51:58 2026 from 192.168.68.118
+cachiadmin@k8s-control:~$ pwd
+/home/cachiadmin
+cachiadmin@k8s-control:~$ mkdir -p ~/manifests/storage
+cachiadmin@k8s-control:~$ cd ~/manifests/storage
+cachiadmin@k8s-control:~/manifests/storage$ vi media-pv.yaml
+cachiadmin@k8s-control:~/manifests/storage$ vi media-pvc.yaml
+cachiadmin@k8s-control:~/manifests/storage$ kubectl apply -f media-pv.yaml
+persistentvolume/pv-media-2tb created
+cachiadmin@k8s-control:~/manifests/storage$ kubectl apply -f media-pvc.yaml
+persistentvolumeclaim/pvc-media created
+cachiadmin@k8s-control:~/manifests/storage$ kubectl get pv,pvc
+NAME                            CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM               STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+persistentvolume/pv-media-2tb   1800Gi     RWX            Retain           Bound    default/pvc-media                  <unset>                          40s
+
+NAME                              STATUS   VOLUME         CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/pvc-media   Bound    pv-media-2tb   1800Gi     RWX                           <unset>                 31s
+cachiadmin@k8s-control:~/manifests/storage$ kubectl kubectl run storage-tester --image=busybox --dry-run=client -o yaml --command -- /bin/sh -c "echo 'NAS Storage is working perfectly!' > /data/test.txt && sleep 3600" > test-pod.yaml
+-bash: !': event not found
+cachiadmin@k8s-control:~/manifests/storage$ ls -lhrt
+total 8.0K
+-rw-rw-r-- 1 cachiadmin cachiadmin 247 Jul  3 22:07 media-pv.yaml
+-rw-rw-r-- 1 cachiadmin cachiadmin 161 Jul  3 22:09 media-pvc.yaml
+cachiadmin@k8s-control:~/manifests/storage$ kubectl run storage-tester --image=busybox --dry-run=client -o yaml --command -- /bin/sh -c "echo 'NAS Storage is working perfectly!' > /data/test.txt && sleep 3600" > test-pod.yaml
+-bash: !': event not found
+cachiadmin@k8s-control:~/manifests/storage$  kubectl run storage-tester --image=busybox --dry-run=client -o yaml --command -- /bin/sh -c "echo 'NAS Storage is working perfectly!' > /data/test.txt && sleep 3600" > test-pod.yaml
+-bash: !': event not found
+cachiadmin@k8s-control:~/manifests/storage$ kubectl run storage-tester --image=busybox --dry-run=client -o yaml --command -- /bin/sh -c "echo 'NAS Storage is working perfectly!' > /data/test.txt && sleep 3600" > test-pod.yaml
+-bash: !': event not found
+cachiadmin@k8s-control:~/manifests/storage$  kubectl run storage-tester --image=busybox --dry-run=client -o yaml --command -- /bin/sh -c "echo 'NAS Storage is working perfectly' > /data/test.txt && sleep 3600" > test-pod.yaml
+cachiadmin@k8s-control:~/manifests/storage$ vi test-pod.yaml 
+cachiadmin@k8s-control:~/manifests/storage$ vi test-pod.yaml 
+cachiadmin@k8s-control:~/manifests/storage$ kubectl apply -f test-pod.yaml 
+error: error parsing test-pod.yaml: error converting YAML to JSON: yaml: line 18: mapping values are not allowed in this context
+cachiadmin@k8s-control:~/manifests/storage$ vi test-pod.yaml 
+cachiadmin@k8s-control:~/manifests/storage$ cat test-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: storage-tester
+  name: storage-tester
+spec:
+  containers:
+  - command:
+    - /bin/sh
+    - -c
+    - echo 'NAS Storage is working perfectly' > /data/test.txt && sleep 3600
+    image: busybox
+    name: storage-tester
+    volumeMounts:
+    - name: media-storage
+        mountPath: /data
+  volumes:
+  - name: media-storage
+    persistentVolumeClaim:
+      claimName: pvc-media
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+cachiadmin@k8s-control:~/manifests/storage$ vi test-pod.yaml
+cachiadmin@k8s-control:~/manifests/storage$ kubectl apply -f test-pod.yaml 
+Error from server (BadRequest): error when creating "test-pod.yaml": Pod in version "v1" cannot be handled as a Pod: strict decoding error: unknown field "spec.resources"
+cachiadmin@k8s-control:~/manifests/storage$ vi test-pod.yaml
+cachiadmin@k8s-control:~/manifests/storage$ kubectl apply -f test-pod.yaml 
+pod/storage-tester created
+cachiadmin@k8s-control:~/manifests/storage$ kubectl get pods
+NAME             READY   STATUS    RESTARTS   AGE
+storage-tester   1/1     Running   0          53s
+cachiadmin@k8s-control:~/manifests/storage$ exit
+logout
+Connection to 192.168.68.101 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clsrv 
+Linux pve 7.0.2-6-pve #1 SMP PREEMPT_DYNAMIC PMX 7.0.2-6 (2026-05-20T08:55Z) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Fri Jul  3 15:32:34 2026 from 192.168.68.118
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+root@pve:~# cat /mnt/pve/media-drive/
+dump/       images/     lost+found/ private/    snippets/   template/   test.txt    
+root@pve:~# cat /mnt/pve/media-drive/te
+template/ test.txt  
+root@pve:~# cat /mnt/pve/media-drive/te
+template/ test.txt  
+root@pve:~# cat /mnt/pve/media-drive/test.txt 
+NAS Storage is working perfectly
+root@pve:~# exit
+logout
+Connection to 192.168.68.114 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Jul  3 10:36:21 PM UTC 2026
+
+  System load:  0.12               Processes:              205
+  Usage of /:   59.4% of 13.67GB   Users logged in:        0
+  Memory usage: 31%                IPv4 address for ens18: 192.168.68.101
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+28 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Fri Jul  3 21:57:52 2026 from 192.168.68.118
+cachiadmin@k8s-control:~$ less /etc/k
+kernel/     keyutils/   kubernetes/ 
+cachiadmin@k8s-control:~$ less /etc/kubernetes/manifests/
+.kubelet-keep                 etcd.yaml                     kube-apiserver.yaml           kube-controller-manager.yaml  kube-scheduler.yaml           
+cachiadmin@k8s-control:~$ less /etc/kubernetes/manifests/^C
+cachiadmin@k8s-control:~$ ls -lhrt
+total 4.0K
+drwxrwxr-x 3 cachiadmin cachiadmin 4.0K Jul  3 21:59 manifests
+cachiadmin@k8s-control:~$ less manifests/storage/
+media-pv.yaml   media-pvc.yaml  test-pod.yaml   
+cachiadmin@k8s-control:~$ less manifests/storage/
+media-pv.yaml   media-pvc.yaml  test-pod.yaml   
+cachiadmin@k8s-control:~$ less manifests/storage/media-pv.yaml 
+cachiadmin@k8s-control:~$ cat manifests/storage/media-pvc.yaml 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-media
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1800Gi
+cachiadmin@k8s-control:~$ cd manifests/storage/
+cachiadmin@k8s-control:~/manifests/storage$ ls
+media-pv.yaml  media-pvc.yaml  test-pod.yaml
+cachiadmin@k8s-control:~/manifests/storage$ rm -f test-pod.yaml 
+cachiadmin@k8s-control:~/manifests/storage$ kubectl delete pod dtorage-tester
+Error from server (NotFound): pods "dtorage-tester" not found
+cachiadmin@k8s-control:~/manifests/storage$ kubectl get pods
+NAME             READY   STATUS    RESTARTS   AGE
+storage-tester   1/1     Running   0          10m
+cachiadmin@k8s-control:~/manifests/storage$ kubectl delete pod storage-tester
+pod "storage-tester" deleted
+cachiadmin@k8s-control:~/manifests/storage$ 
