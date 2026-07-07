@@ -1,0 +1,842 @@
+Last login: Tue Jul  7 09:02:05 on console
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl 
+ssh: connect to host 192.168.68.101 port 22: Operation timed out
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Tue Jul  7 06:33:36 PM UTC 2026
+
+  System load:  0.3                Processes:              206
+  Usage of /:   61.3% of 13.67GB   Users logged in:        0
+  Memory usage: 32%                IPv4 address for ens18: 192.168.68.101
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+28 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Sat Jul  4 05:43:36 2026 from 192.168.68.117
+cachiadmin@k8s-control:~$ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
+namespace/metallb-system created
+customresourcedefinition.apiextensions.k8s.io/bfdprofiles.metallb.io created
+customresourcedefinition.apiextensions.k8s.io/bgpadvertisements.metallb.io created
+customresourcedefinition.apiextensions.k8s.io/bgppeers.metallb.io created
+customresourcedefinition.apiextensions.k8s.io/communities.metallb.io created
+customresourcedefinition.apiextensions.k8s.io/ipaddresspools.metallb.io created
+customresourcedefinition.apiextensions.k8s.io/l2advertisements.metallb.io created
+customresourcedefinition.apiextensions.k8s.io/servicel2statuses.metallb.io created
+serviceaccount/controller created
+serviceaccount/speaker created
+role.rbac.authorization.k8s.io/controller created
+role.rbac.authorization.k8s.io/pod-lister created
+clusterrole.rbac.authorization.k8s.io/metallb-system:controller created
+clusterrole.rbac.authorization.k8s.io/metallb-system:speaker created
+rolebinding.rbac.authorization.k8s.io/controller created
+rolebinding.rbac.authorization.k8s.io/pod-lister created
+clusterrolebinding.rbac.authorization.k8s.io/metallb-system:controller created
+clusterrolebinding.rbac.authorization.k8s.io/metallb-system:speaker created
+configmap/metallb-excludel2 created
+secret/metallb-webhook-cert created
+service/metallb-webhook-service created
+deployment.apps/controller created
+daemonset.apps/speaker created
+validatingwebhookconfiguration.admissionregistration.k8s.io/metallb-webhook-configuration created
+cachiadmin@k8s-control:~$ kubectl get pods -A
+NAMESPACE          NAME                                       READY   STATUS    RESTARTS   AGE
+calico-apiserver   calico-apiserver-f7486745-2smrs            1/1     Running   0          3d21h
+calico-apiserver   calico-apiserver-f7486745-vh5dr            1/1     Running   0          3d21h
+calico-system      calico-kube-controllers-7996795768-m8dkg   1/1     Running   0          3d21h
+calico-system      calico-node-j7mtd                          1/1     Running   0          3d21h
+calico-system      calico-node-qzrh8                          1/1     Running   0          3d21h
+calico-system      calico-node-rz9vp                          1/1     Running   0          3d21h
+calico-system      calico-typha-5bbfc6df5b-2d4gx              1/1     Running   0          3d21h
+calico-system      calico-typha-5bbfc6df5b-wtz2n              1/1     Running   0          3d21h
+calico-system      csi-node-driver-6hvpb                      2/2     Running   0          3d21h
+calico-system      csi-node-driver-gvdrl                      2/2     Running   0          3d21h
+calico-system      csi-node-driver-kk8px                      2/2     Running   0          3d21h
+kube-system        coredns-55cb58b774-nhlvc                   1/1     Running   0          3d22h
+kube-system        coredns-55cb58b774-njpq7                   1/1     Running   0          3d22h
+kube-system        etcd-k8s-control                           1/1     Running   0          3d22h
+kube-system        kube-apiserver-k8s-control                 1/1     Running   0          3d22h
+kube-system        kube-controller-manager-k8s-control        1/1     Running   0          3d22h
+kube-system        kube-proxy-5zngv                           1/1     Running   0          3d21h
+kube-system        kube-proxy-6k92z                           1/1     Running   0          3d21h
+kube-system        kube-proxy-6mlrq                           1/1     Running   0          3d22h
+kube-system        kube-scheduler-k8s-control                 1/1     Running   0          3d22h
+metallb-system     controller-86f5578878-5qwxp                1/1     Running   0          24s
+metallb-system     speaker-4gzsn                              0/1     Running   0          24s
+metallb-system     speaker-pdtlb                              0/1     Running   0          24s
+metallb-system     speaker-q8pg5                              0/1     Running   0          24s
+tigera-operator    tigera-operator-76ff79f7fd-pdfzp           1/1     Running   0          3d21h
+cachiadmin@k8s-control:~$ kubectl get pods -n metallb-system -w
+NAME                          READY   STATUS    RESTARTS   AGE
+controller-86f5578878-5qwxp   1/1     Running   0          49s
+speaker-4gzsn                 1/1     Running   0          49s
+speaker-pdtlb                 1/1     Running   0          49s
+speaker-q8pg5                 1/1     Running   0          49s
+^Ccachiadmin@k8s-control:~$ kubectl get pods -n metallb-system -o wide
+NAME                          READY   STATUS    RESTARTS   AGE   IP               NODE          NOMINATED NODE   READINESS GATES
+controller-86f5578878-5qwxp   1/1     Running   0          92s   192.168.126.3    k8s-worker2   <none>           <none>
+speaker-4gzsn                 1/1     Running   0          92s   192.168.68.115   k8s-worker2   <none>           <none>
+speaker-pdtlb                 1/1     Running   0          92s   192.168.68.101   k8s-control   <none>           <none>
+speaker-q8pg5                 1/1     Running   0          92s   192.168.68.113   k8s-worker1   <none>           <none>
+cachiadmin@k8s-control:~$ ls
+manifests
+cachiadmin@k8s-control:~$ cd manifests/
+cachiadmin@k8s-control:~/manifests$ ls
+storage
+cachiadmin@k8s-control:~/manifests$ vi metallb-config.yaml
+cachiadmin@k8s-control:~/manifests$ ls
+storage
+cachiadmin@k8s-control:~/manifests$ mkdir networking && cg networking
+Command 'cg' not found, but can be installed with:
+sudo apt install cgvg
+cachiadmin@k8s-control:~/manifests$ cd networking
+cachiadmin@k8s-control:~/manifests/networking$ ls -lhrt
+total 0
+cachiadmin@k8s-control:~/manifests/networking$ vi metallb-config.yaml
+cachiadmin@k8s-control:~/manifests/networking$ kubectl apply -f metallb-config.yaml 
+ipaddresspool.metallb.io/home-network-pool created
+l2advertisement.metallb.io/home-network-advertisement created
+cachiadmin@k8s-control:~/manifests/networking$ cd 
+cachiadmin@k8s-control:~$ kubectl create deployment web-test --image=nginx
+deployment.apps/web-test created
+cachiadmin@k8s-control:~$ kubectl expose deployment web-test --port --type=LoadBalancer
+error: strconv.Atoi: parsing "--type=LoadBalancer": invalid syntax
+cachiadmin@k8s-control:~$ kubectl get svc web-test
+Error from server (NotFound): services "web-test" not found
+cachiadmin@k8s-control:~$ kubectl expose deployment web-test --port=80 --type=LoadBalancer
+service/web-test exposed
+cachiadmin@k8s-control:~$ kubectl get svc web-test
+NAME       TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
+web-test   LoadBalancer   10.111.96.171   192.168.68.200   80:31669/TCP   6s
+cachiadmin@k8s-control:~$ kubectl get deployment
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+web-test   1/1     1            1           8m43s
+cachiadmin@k8s-control:~$ kubectl describe deployment web-test
+Name:                   web-test
+Namespace:              default
+CreationTimestamp:      Tue, 07 Jul 2026 18:51:45 +0000
+Labels:                 app=web-test
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=web-test
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=web-test
+  Containers:
+   nginx:
+    Image:         nginx
+    Port:          <none>
+    Host Port:     <none>
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   web-test-6bf75b9475 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  8m59s  deployment-controller  Scaled up replica set web-test-6bf75b9475 to 1
+cachiadmin@k8s-control:~$ kubectl get rs
+NAME                  DESIRED   CURRENT   READY   AGE
+web-test-6bf75b9475   1         1         1       10m
+cachiadmin@k8s-control:~$ kubectl describe rs web-test-6bf75b9475
+Name:           web-test-6bf75b9475
+Namespace:      default
+Selector:       app=web-test,pod-template-hash=6bf75b9475
+Labels:         app=web-test
+                pod-template-hash=6bf75b9475
+Annotations:    deployment.kubernetes.io/desired-replicas: 1
+                deployment.kubernetes.io/max-replicas: 2
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/web-test
+Replicas:       1 current / 1 desired
+Pods Status:    1 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=web-test
+           pod-template-hash=6bf75b9475
+  Containers:
+   nginx:
+    Image:         nginx
+    Port:          <none>
+    Host Port:     <none>
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  10m   replicaset-controller  Created pod: web-test-6bf75b9475-wblnt
+cachiadmin@k8s-control:~$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+web-test-6bf75b9475-wblnt   1/1     Running   0          10m
+cachiadmin@k8s-control:~$ kubectl get pods -A
+NAMESPACE          NAME                                       READY   STATUS    RESTARTS   AGE
+calico-apiserver   calico-apiserver-f7486745-2smrs            1/1     Running   0          3d22h
+calico-apiserver   calico-apiserver-f7486745-vh5dr            1/1     Running   0          3d22h
+calico-system      calico-kube-controllers-7996795768-m8dkg   1/1     Running   0          3d22h
+calico-system      calico-node-j7mtd                          1/1     Running   0          3d22h
+calico-system      calico-node-qzrh8                          1/1     Running   0          3d22h
+calico-system      calico-node-rz9vp                          1/1     Running   0          3d22h
+calico-system      calico-typha-5bbfc6df5b-2d4gx              1/1     Running   0          3d22h
+calico-system      calico-typha-5bbfc6df5b-wtz2n              1/1     Running   0          3d22h
+calico-system      csi-node-driver-6hvpb                      2/2     Running   0          3d22h
+calico-system      csi-node-driver-gvdrl                      2/2     Running   0          3d22h
+calico-system      csi-node-driver-kk8px                      2/2     Running   0          3d22h
+default            web-test-6bf75b9475-wblnt                  1/1     Running   0          11m
+kube-system        coredns-55cb58b774-nhlvc                   1/1     Running   0          3d22h
+kube-system        coredns-55cb58b774-njpq7                   1/1     Running   0          3d22h
+kube-system        etcd-k8s-control                           1/1     Running   0          3d22h
+kube-system        kube-apiserver-k8s-control                 1/1     Running   0          3d22h
+kube-system        kube-controller-manager-k8s-control        1/1     Running   0          3d22h
+kube-system        kube-proxy-5zngv                           1/1     Running   0          3d22h
+kube-system        kube-proxy-6k92z                           1/1     Running   0          3d22h
+kube-system        kube-proxy-6mlrq                           1/1     Running   0          3d22h
+kube-system        kube-scheduler-k8s-control                 1/1     Running   0          3d22h
+metallb-system     controller-86f5578878-5qwxp                1/1     Running   0          17m
+metallb-system     speaker-4gzsn                              1/1     Running   0          17m
+metallb-system     speaker-pdtlb                              1/1     Running   0          17m
+metallb-system     speaker-q8pg5                              1/1     Running   0          17m
+tigera-operator    tigera-operator-76ff79f7fd-pdfzp           1/1     Running   0          3d22h
+cachiadmin@k8s-control:~$ kubectl delete pod -l app=web-test
+pod "web-test-6bf75b9475-wblnt" deleted
+cachiadmin@k8s-control:~$ kubectl get pods -A -w
+NAMESPACE          NAME                                       READY   STATUS              RESTARTS   AGE
+calico-apiserver   calico-apiserver-f7486745-2smrs            1/1     Running             0          3d22h
+calico-apiserver   calico-apiserver-f7486745-vh5dr            1/1     Running             0          3d22h
+calico-system      calico-kube-controllers-7996795768-m8dkg   1/1     Running             0          3d22h
+calico-system      calico-node-j7mtd                          1/1     Running             0          3d22h
+calico-system      calico-node-qzrh8                          1/1     Running             0          3d22h
+calico-system      calico-node-rz9vp                          1/1     Running             0          3d22h
+calico-system      calico-typha-5bbfc6df5b-2d4gx              1/1     Running             0          3d22h
+calico-system      calico-typha-5bbfc6df5b-wtz2n              1/1     Running             0          3d22h
+calico-system      csi-node-driver-6hvpb                      2/2     Running             0          3d22h
+calico-system      csi-node-driver-gvdrl                      2/2     Running             0          3d22h
+calico-system      csi-node-driver-kk8px                      2/2     Running             0          3d22h
+default            web-test-6bf75b9475-p5bbx                  0/1     ContainerCreating   0          5s
+kube-system        coredns-55cb58b774-nhlvc                   1/1     Running             0          3d22h
+kube-system        coredns-55cb58b774-njpq7                   1/1     Running             0          3d22h
+kube-system        etcd-k8s-control                           1/1     Running             0          3d22h
+kube-system        kube-apiserver-k8s-control                 1/1     Running             0          3d22h
+kube-system        kube-controller-manager-k8s-control        1/1     Running             0          3d22h
+kube-system        kube-proxy-5zngv                           1/1     Running             0          3d22h
+kube-system        kube-proxy-6k92z                           1/1     Running             0          3d22h
+kube-system        kube-proxy-6mlrq                           1/1     Running             0          3d22h
+kube-system        kube-scheduler-k8s-control                 1/1     Running             0          3d22h
+metallb-system     controller-86f5578878-5qwxp                1/1     Running             0          18m
+metallb-system     speaker-4gzsn                              1/1     Running             0          18m
+metallb-system     speaker-pdtlb                              1/1     Running             0          18m
+metallb-system     speaker-q8pg5                              1/1     Running             0          18m
+tigera-operator    tigera-operator-76ff79f7fd-pdfzp           1/1     Running             0          3d22h
+default            web-test-6bf75b9475-p5bbx                  1/1     Running             0          10s
+^Ccachiadmin@k8s-control:~$ kubectl delete service web-test
+service "web-test" deleted
+cachiadmin@k8s-control:~$ kubectl delete deployment web-test
+deployment.apps "web-test" deleted
+cachiadmin@k8s-control:~$ ls -lhrt
+total 4.0K
+drwxrwxr-x 4 cachiadmin cachiadmin 4.0K Jul  7 18:48 manifests
+cachiadmin@k8s-control:~$ mkdir -p ~/manifests/media-server && cd media-server
+-bash: cd: media-server: No such file or directory
+cachiadmin@k8s-control:~$ cd ~/manifests/media-server/
+cachiadmin@k8s-control:~/manifests/media-server$ vi jellyfin.yaml
+cachiadmin@k8s-control:~/manifests/media-server$ kubectl apply -f jellyfin.yaml
+deployment.apps/jellyfin created
+service/jellyfin-svc created
+cachiadmin@k8s-control:~/manifests/media-server$ kubectl get pods,svc -o wide
+NAME                            READY   STATUS              RESTARTS   AGE   IP       NODE          NOMINATED NODE   READINESS GATES
+pod/jellyfin-6685498b77-8qj8k   0/1     ContainerCreating   0          17s   <none>   k8s-worker1   <none>           <none>
+
+NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)          AGE     SELECTOR
+service/jellyfin-svc   LoadBalancer   10.106.199.249   192.168.68.200   8096:32121/TCP   17s     app=jellyfin
+service/kubernetes     ClusterIP      10.96.0.1        <none>           443/TCP          3d22h   <none>
+cachiadmin@k8s-control:~/manifests/media-server$ kubectl get pods,svc -o wide -w
+error: you may only specify a single resource type
+cachiadmin@k8s-control:~/manifests/media-server$ kubectl get pods,svc -o wide
+NAME                            READY   STATUS    RESTARTS   AGE   IP               NODE          NOMINATED NODE   READINESS GATES
+pod/jellyfin-6685498b77-8qj8k   1/1     Running   0          68s   192.168.194.67   k8s-worker1   <none>           <none>
+
+NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)          AGE     SELECTOR
+service/jellyfin-svc   LoadBalancer   10.106.199.249   192.168.68.200   8096:32121/TCP   68s     app=jellyfin
+service/kubernetes     ClusterIP      10.96.0.1        <none>           443/TCP          3d22h   <none>
+cachiadmin@k8s-control:~/manifests/media-server$ kubectl get pods,svc -o wide
+NAME                            READY   STATUS                   RESTARTS   AGE    IP               NODE          NOMINATED NODE   READINESS GATES
+pod/jellyfin-6685498b77-8qj8k   0/1     ContainerStatusUnknown   1          97m    192.168.194.67   k8s-worker1   <none>           <none>
+pod/jellyfin-6685498b77-jtqrk   0/1     Completed                0          19m    192.168.194.68   k8s-worker1   <none>           <none>
+pod/jellyfin-6685498b77-qz4dc   0/1     Completed                0          4m3s   192.168.126.6    k8s-worker2   <none>           <none>
+pod/jellyfin-6685498b77-tmckh   0/1     Pending                  0          74s    <none>           <none>        <none>           <none>
+pod/jellyfin-6685498b77-wfzxs   0/1     ContainerStatusUnknown   1          35m    192.168.126.5    k8s-worker2   <none>           <none>
+
+NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)          AGE   SELECTOR
+service/jellyfin-svc   LoadBalancer   10.106.199.249   192.168.68.200   8096:32121/TCP   97m   app=jellyfin
+service/kubernetes     ClusterIP      10.96.0.1        <none>           443/TCP          4d    <none>
+cachiadmin@k8s-control:~/manifests/media-server$ kubectl get pods
+NAME                        READY   STATUS                   RESTARTS   AGE
+jellyfin-6685498b77-8qj8k   0/1     ContainerStatusUnknown   1          98m
+jellyfin-6685498b77-jtqrk   0/1     Completed                0          19m
+jellyfin-6685498b77-qz4dc   0/1     Completed                0          4m34s
+jellyfin-6685498b77-tmckh   0/1     Pending                  0          105s
+jellyfin-6685498b77-wfzxs   0/1     ContainerStatusUnknown   1          35m
+cachiadmin@k8s-control:~/manifests/media-server$ kubectl get pods,svc -o wide
+NAME                            READY   STATUS                   RESTARTS   AGE     IP               NODE          NOMINATED NODE   READINESS GATES
+pod/jellyfin-6685498b77-8qj8k   0/1     ContainerStatusUnknown   1          98m     192.168.194.67   k8s-worker1   <none>           <none>
+pod/jellyfin-6685498b77-jtqrk   0/1     Completed                0          20m     192.168.194.68   k8s-worker1   <none>           <none>
+pod/jellyfin-6685498b77-qz4dc   0/1     Completed                0          4m48s   192.168.126.6    k8s-worker2   <none>           <none>
+pod/jellyfin-6685498b77-tmckh   0/1     Pending                  0          119s    <none>           <none>        <none>           <none>
+pod/jellyfin-6685498b77-wfzxs   0/1     ContainerStatusUnknown   1          35m     192.168.126.5    k8s-worker2   <none>           <none>
+
+NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)          AGE   SELECTOR
+service/jellyfin-svc   LoadBalancer   10.106.199.249   192.168.68.200   8096:32121/TCP   98m   app=jellyfin
+service/kubernetes     ClusterIP      10.96.0.1        <none>           443/TCP          4d    <none>
+cachiadmin@k8s-control:~/manifests/media-server$ kubectl get pods -o wide
+NAME                        READY   STATUS                   RESTARTS   AGE     IP               NODE          NOMINATED NODE   READINESS GATES
+jellyfin-6685498b77-8qj8k   0/1     ContainerStatusUnknown   1          98m     192.168.194.67   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-jtqrk   0/1     Completed                0          20m     192.168.194.68   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-qz4dc   0/1     Completed                0          4m54s   192.168.126.6    k8s-worker2   <none>           <none>
+jellyfin-6685498b77-tmckh   0/1     Pending                  0          2m5s    <none>           <none>        <none>           <none>
+jellyfin-6685498b77-wfzxs   0/1     ContainerStatusUnknown   1          35m     192.168.126.5    k8s-worker2   <none>           <none>
+cachiadmin@k8s-control:~/manifests/media-server$ kubectl get pods -o wide
+NAME                        READY   STATUS                   RESTARTS   AGE     IP               NODE          NOMINATED NODE   READINESS GATES
+jellyfin-6685498b77-8qj8k   0/1     ContainerStatusUnknown   1          99m     192.168.194.67   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-jtqrk   0/1     Completed                0          21m     192.168.194.68   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-qz4dc   0/1     Completed                0          6m2s    192.168.126.6    k8s-worker2   <none>           <none>
+jellyfin-6685498b77-tmckh   1/1     Running                  0          3m13s   192.168.194.70   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-wfzxs   0/1     ContainerStatusUnknown   1          37m     192.168.126.5    k8s-worker2   <none>           <none>
+cachiadmin@k8s-control:~/manifests/media-server$ kubectl get pods -o wide -w
+NAME                        READY   STATUS                   RESTARTS   AGE     IP               NODE          NOMINATED NODE   READINESS GATES
+jellyfin-6685498b77-8qj8k   0/1     ContainerStatusUnknown   1          102m    192.168.194.67   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-jtqrk   0/1     Completed                0          24m     192.168.194.68   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-qz4dc   0/1     Completed                0          8m41s   192.168.126.6    k8s-worker2   <none>           <none>
+jellyfin-6685498b77-tmckh   1/1     Running                  0          5m52s   192.168.194.70   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-wfzxs   0/1     ContainerStatusUnknown   1          39m     192.168.126.5    k8s-worker2   <none>           <none>
+jellyfin-6685498b77-tmckh   1/1     Running                  0          6m59s   192.168.194.70   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-tmckh   0/1     Error                    0          6m59s   192.168.194.70   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-pcr4z   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-pcr4z   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-pcr4z   0/1     ContainerCreating        0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-pcr4z   0/1     ContainerCreating        0          1s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-pcr4z   1/1     Running                  0          2s      192.168.126.7    k8s-worker2   <none>           <none>
+jellyfin-6685498b77-pcr4z   1/1     Running                  0          65s     192.168.126.7    k8s-worker2   <none>           <none>
+jellyfin-6685498b77-pcr4z   0/1     Completed                0          65s     192.168.126.7    k8s-worker2   <none>           <none>
+jellyfin-6685498b77-ss4b9   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-ss4b9   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-ss4b9   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-2ssph   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-2ssph   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-2ssph   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-mnb9d   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-mnb9d   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-mnb9d   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-9dbjk   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-9dbjk   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-9dbjk   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-s944h   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-s944h   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-s944h   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-ctrfj   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-ctrfj   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-ctrfj   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-kp56n   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-kp56n   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-kp56n   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-98vqv   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-98vqv   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-98vqv   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-zcknx   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-zcknx   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-zcknx   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-gpf9n   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-gpf9n   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-gpf9n   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-sq82x   0/1     Pending                  0          1s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-sq82x   0/1     Pending                  0          1s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-sq82x   0/1     Evicted                  0          1s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-tfzjg   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-tfzjg   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-tfzjg   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-9w49r   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-9w49r   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-9w49r   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-zbwsc   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-zbwsc   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-zbwsc   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-6k2c8   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-6k2c8   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-6k2c8   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-4kbkw   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-4kbkw   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-4kbkw   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-rq4vm   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-rq4vm   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-rq4vm   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-gb8z9   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-gb8z9   0/1     Pending                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-gb8z9   0/1     Evicted                  0          0s      <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-4dq6l   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+jellyfin-6685498b77-4dq6l   0/1     Pending                  0          0s      <none>           <none>        <none>           <none>
+q^Ccachiadmin@k8s-control:~/manifests/media-server$ 
+cachiadmin@k8s-control:~/manifests/media-server$ 
+cachiadmin@k8s-control:~/manifests/media-server$ kubectl get logs
+error: the server doesn't have a resource type "logs"
+cachiadmin@k8s-control:~/manifests/media-server$ kubectl get pods
+NAME                        READY   STATUS                   RESTARTS   AGE
+jellyfin-6685498b77-2ssph   0/1     Evicted                  0          2m
+jellyfin-6685498b77-4dq6l   0/1     Pending                  0          119s
+jellyfin-6685498b77-4kbkw   0/1     Evicted                  0          119s
+jellyfin-6685498b77-6k2c8   0/1     Evicted                  0          119s
+jellyfin-6685498b77-8qj8k   0/1     ContainerStatusUnknown   1          106m
+jellyfin-6685498b77-98vqv   0/1     Evicted                  0          2m
+jellyfin-6685498b77-9dbjk   0/1     Evicted                  0          2m
+jellyfin-6685498b77-9w49r   0/1     Evicted                  0          119s
+jellyfin-6685498b77-ctrfj   0/1     Evicted                  0          2m
+jellyfin-6685498b77-gb8z9   0/1     Evicted                  0          119s
+jellyfin-6685498b77-gpf9n   0/1     Evicted                  0          2m
+jellyfin-6685498b77-jtqrk   0/1     Completed                0          28m
+jellyfin-6685498b77-kp56n   0/1     Evicted                  0          2m
+jellyfin-6685498b77-mnb9d   0/1     Evicted                  0          2m
+jellyfin-6685498b77-pcr4z   0/1     Completed                0          3m6s
+jellyfin-6685498b77-qz4dc   0/1     Completed                0          12m
+jellyfin-6685498b77-rq4vm   0/1     Evicted                  0          119s
+jellyfin-6685498b77-s944h   0/1     Evicted                  0          2m
+jellyfin-6685498b77-sq82x   0/1     Evicted                  0          2m
+jellyfin-6685498b77-ss4b9   0/1     Evicted                  0          2m
+jellyfin-6685498b77-tfzjg   0/1     Evicted                  0          119s
+jellyfin-6685498b77-tmckh   0/1     Error                    0          10m
+jellyfin-6685498b77-wfzxs   0/1     ContainerStatusUnknown   1          43m
+jellyfin-6685498b77-zbwsc   0/1     Evicted                  0          119s
+jellyfin-6685498b77-zcknx   0/1     Evicted                  0          2m
+cachiadmin@k8s-control:~/manifests/media-server$ less
+Missing filename ("less --help" for help)
+cachiadmin@k8s-control:~/manifests/media-server$ cat jellyfin.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+  labels:
+    app: jellyfin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+    spec:
+      # Ensures this only runs on our Dell Tower VMs, not the Pi (yet)
+      nodeSelector:
+        kubernetes.io/arch: amd64 
+      containers:
+      - name: jellyfin
+        image: jellyfin/jellyfin:latest
+        ports:
+        - containerPort: 8096
+        volumeMounts:
+        - name: nas-storage
+          mountPath: /config
+          subPath: jellyfin-config  # Creates a specific folder on the USB drive
+        - name: nas-storage
+          mountPath: /media
+          subPath: jellyfin-media   # Creates a specific folder on the USB drive
+      volumes:
+      - name: nas-storage
+        persistentVolumeClaim:
+          claimName: pvc-media      # Links back to our 2TB USB drive!
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyfin-svc
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8096
+    targetPort: 8096
+  selector:
+    app: jellyfin
+cachiadmin@k8s-control:~/manifests/media-server$ cd ..
+cachiadmin@k8s-control:~/manifests$ ls -lhrt
+total 12K
+drwxrwxr-x 2 cachiadmin cachiadmin 4.0K Jul  3 22:40 storage
+drwxrwxr-x 2 cachiadmin cachiadmin 4.0K Jul  7 18:50 networking
+drwxrwxr-x 2 cachiadmin cachiadmin 4.0K Jul  7 19:09 media-server
+cachiadmin@k8s-control:~/manifests$ ls -lhrt networking/
+total 4.0K
+-rw-rw-r-- 1 cachiadmin cachiadmin 344 Jul  7 18:50 metallb-config.yaml
+cachiadmin@k8s-control:~/manifests$ cat networking/metallb-config.yaml 
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: home-network-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.68.200-192.168.68.240
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: home-network-advertisement
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - home-network-pool
+cachiadmin@k8s-control:~/manifests$ cat jellyfin.yaml
+cat: jellyfin.yaml: No such file or directory
+cachiadmin@k8s-control:~/manifests$ kubectl get pods
+NAME                        READY   STATUS                   RESTARTS   AGE
+jellyfin-6685498b77-2ssph   0/1     Evicted                  0          7m42s
+jellyfin-6685498b77-4dq6l   1/1     Running                  0          7m41s
+jellyfin-6685498b77-4kbkw   0/1     Evicted                  0          7m41s
+jellyfin-6685498b77-6k2c8   0/1     Evicted                  0          7m41s
+jellyfin-6685498b77-8qj8k   0/1     ContainerStatusUnknown   1          112m
+jellyfin-6685498b77-98vqv   0/1     Evicted                  0          7m42s
+jellyfin-6685498b77-9dbjk   0/1     Evicted                  0          7m42s
+jellyfin-6685498b77-9w49r   0/1     Evicted                  0          7m41s
+jellyfin-6685498b77-ctrfj   0/1     Evicted                  0          7m42s
+jellyfin-6685498b77-gb8z9   0/1     Evicted                  0          7m41s
+jellyfin-6685498b77-gpf9n   0/1     Evicted                  0          7m42s
+jellyfin-6685498b77-jtqrk   0/1     Completed                0          33m
+jellyfin-6685498b77-kp56n   0/1     Evicted                  0          7m42s
+jellyfin-6685498b77-mnb9d   0/1     Evicted                  0          7m42s
+jellyfin-6685498b77-pcr4z   0/1     Completed                0          8m48s
+jellyfin-6685498b77-qz4dc   0/1     Completed                0          18m
+jellyfin-6685498b77-rq4vm   0/1     Evicted                  0          7m41s
+jellyfin-6685498b77-s944h   0/1     Evicted                  0          7m42s
+jellyfin-6685498b77-sq82x   0/1     Evicted                  0          7m42s
+jellyfin-6685498b77-ss4b9   0/1     Evicted                  0          7m42s
+jellyfin-6685498b77-tfzjg   0/1     Evicted                  0          7m41s
+jellyfin-6685498b77-tmckh   0/1     Error                    0          15m
+jellyfin-6685498b77-wfzxs   0/1     ContainerStatusUnknown   1          49m
+jellyfin-6685498b77-zbwsc   0/1     Evicted                  0          7m41s
+jellyfin-6685498b77-zcknx   0/1     Evicted                  0          7m42s
+cachiadmin@k8s-control:~/manifests$ kubectl get svc
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)          AGE
+jellyfin-svc   LoadBalancer   10.106.199.249   192.168.68.200   8096:32121/TCP   112m
+kubernetes     ClusterIP      10.96.0.1        <none>           443/TCP          4d
+cachiadmin@k8s-control:~/manifests$ kubectl get svc -w
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)          AGE
+jellyfin-svc   LoadBalancer   10.106.199.249   192.168.68.200   8096:32121/TCP   114m
+kubernetes     ClusterIP      10.96.0.1        <none>           443/TCP          4d
+^[[A^Ccachiadmin@k8s-control:~/manifests$ kubectl get pods -w
+NAME                        READY   STATUS                   RESTARTS   AGE
+jellyfin-6685498b77-2ssph   0/1     Evicted                  0          10m
+jellyfin-6685498b77-4dq6l   0/1     Completed                0          10m
+jellyfin-6685498b77-4kbkw   0/1     Evicted                  0          10m
+jellyfin-6685498b77-6k2c8   0/1     Evicted                  0          10m
+jellyfin-6685498b77-8qj8k   0/1     ContainerStatusUnknown   1          114m
+jellyfin-6685498b77-98vqv   0/1     Evicted                  0          10m
+jellyfin-6685498b77-9dbjk   0/1     Evicted                  0          10m
+jellyfin-6685498b77-9w49r   0/1     Evicted                  0          10m
+jellyfin-6685498b77-ctrfj   0/1     Evicted                  0          10m
+jellyfin-6685498b77-gb8z9   0/1     Evicted                  0          10m
+jellyfin-6685498b77-gpf9n   0/1     Evicted                  0          10m
+jellyfin-6685498b77-jtqrk   0/1     Completed                0          36m
+jellyfin-6685498b77-kp56n   0/1     Evicted                  0          10m
+jellyfin-6685498b77-kzxgr   1/1     Running                  0          4s
+jellyfin-6685498b77-mnb9d   0/1     Evicted                  0          10m
+jellyfin-6685498b77-pcr4z   0/1     Completed                0          11m
+jellyfin-6685498b77-qz4dc   0/1     Completed                0          20m
+jellyfin-6685498b77-rq4vm   0/1     Evicted                  0          10m
+jellyfin-6685498b77-s944h   0/1     Evicted                  0          10m
+jellyfin-6685498b77-sq82x   0/1     Evicted                  0          10m
+jellyfin-6685498b77-ss4b9   0/1     Evicted                  0          10m
+jellyfin-6685498b77-tfzjg   0/1     Evicted                  0          10m
+jellyfin-6685498b77-tmckh   0/1     Error                    0          18m
+jellyfin-6685498b77-wfzxs   0/1     ContainerStatusUnknown   1          52m
+jellyfin-6685498b77-zbwsc   0/1     Evicted                  0          10m
+jellyfin-6685498b77-zcknx   0/1     Evicted                  0          10m
+q^Ccachiadmin@k8s-control:~/manifests$ kubectl describe pod jellyfin-6685498b77-mnb9d
+Name:             jellyfin-6685498b77-mnb9d
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             k8s-worker2/
+Start Time:       Tue, 07 Jul 2026 20:54:55 +0000
+Labels:           app=jellyfin
+                  pod-template-hash=6685498b77
+Annotations:      <none>
+Status:           Failed
+Reason:           Evicted
+Message:          Pod was rejected: The node had condition: [DiskPressure]. 
+IP:               
+IPs:              <none>
+Controlled By:    ReplicaSet/jellyfin-6685498b77
+Containers:
+  jellyfin:
+    Image:        jellyfin/jellyfin:latest
+    Port:         8096/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:
+      /config from nas-storage (rw,path="jellyfin-config")
+      /media from nas-storage (rw,path="jellyfin-media")
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-4t9vw (ro)
+Volumes:
+  nas-storage:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  pvc-media
+    ReadOnly:   false
+  kube-api-access-4t9vw:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/arch=amd64
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age   From               Message
+  ----     ------     ----  ----               -------
+  Normal   Scheduled  15m   default-scheduler  Successfully assigned default/jellyfin-6685498b77-mnb9d to k8s-worker2
+  Warning  Evicted    15m   kubelet            The node had condition: [DiskPressure].
+cachiadmin@k8s-control:~/manifests$ kubectl get nodes
+NAME          STATUS   ROLES           AGE   VERSION
+k8s-control   Ready    control-plane   4d    v1.30.14
+k8s-worker1   Ready    <none>          4d    v1.30.14
+k8s-worker2   Ready    <none>          4d    v1.30.14
+cachiadmin@k8s-control:~/manifests$ kubectl logs jellyfin-6685498b77-mnb9d --previous
+Error from server (BadRequest): container "jellyfin" in pod "jellyfin-6685498b77-mnb9d" is not available
+cachiadmin@k8s-control:~/manifests$ kubectl logs jellyfin-6685498b77-mnb9d
+Error from server (BadRequest): container "jellyfin" in pod "jellyfin-6685498b77-mnb9d" is not available
+cachiadmin@k8s-control:~/manifests$ kubectl get pods -w
+NAME                        READY   STATUS                   RESTARTS   AGE
+jellyfin-6685498b77-2ssph   0/1     Evicted                  0          19m
+jellyfin-6685498b77-4dq6l   0/1     Completed                0          19m
+jellyfin-6685498b77-4kbkw   0/1     Evicted                  0          19m
+jellyfin-6685498b77-6k2c8   0/1     Evicted                  0          19m
+jellyfin-6685498b77-8qj8k   0/1     ContainerStatusUnknown   1          123m
+jellyfin-6685498b77-98vqv   0/1     Evicted                  0          19m
+jellyfin-6685498b77-9dbjk   0/1     Evicted                  0          19m
+jellyfin-6685498b77-9w49r   0/1     Evicted                  0          19m
+jellyfin-6685498b77-ctrfj   0/1     Evicted                  0          19m
+jellyfin-6685498b77-gb8z9   0/1     Evicted                  0          19m
+jellyfin-6685498b77-gpf9n   0/1     Evicted                  0          19m
+jellyfin-6685498b77-jtqrk   0/1     Completed                0          45m
+jellyfin-6685498b77-kp56n   0/1     Evicted                  0          19m
+jellyfin-6685498b77-kzxgr   1/1     Running                  0          9m19s
+jellyfin-6685498b77-mnb9d   0/1     Evicted                  0          19m
+jellyfin-6685498b77-pcr4z   0/1     Completed                0          20m
+jellyfin-6685498b77-qz4dc   0/1     Completed                0          30m
+jellyfin-6685498b77-rq4vm   0/1     Evicted                  0          19m
+jellyfin-6685498b77-s944h   0/1     Evicted                  0          19m
+jellyfin-6685498b77-sq82x   0/1     Evicted                  0          19m
+jellyfin-6685498b77-ss4b9   0/1     Evicted                  0          19m
+jellyfin-6685498b77-tfzjg   0/1     Evicted                  0          19m
+jellyfin-6685498b77-tmckh   0/1     Error                    0          27m
+jellyfin-6685498b77-wfzxs   0/1     ContainerStatusUnknown   1          61m
+jellyfin-6685498b77-zbwsc   0/1     Evicted                  0          19m
+jellyfin-6685498b77-zcknx   0/1     Evicted                  0          19m
+^Ccachiadmin@k8s-control:~/manifests$ kubectl logs jellyfin-6685498b77-mnb9d
+Error from server (BadRequest): container "jellyfin" in pod "jellyfin-6685498b77-mnb9d" is not available
+cachiadmin@k8s-control:~/manifests$ kubectl get pods -o wide
+NAME                        READY   STATUS                   RESTARTS   AGE    IP               NODE          NOMINATED NODE   READINESS GATES
+jellyfin-6685498b77-2ssph   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-4dq6l   0/1     Completed                0          22m    192.168.194.71   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-4kbkw   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-6k2c8   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-8qj8k   0/1     ContainerStatusUnknown   1          127m   192.168.194.67   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-98vqv   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-9dbjk   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-9w49r   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-ctrfj   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-gb8z9   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-gpf9n   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-jtqrk   0/1     Completed                0          48m    192.168.194.68   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-kp56n   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-kzxgr   1/1     Running                  0          12m    192.168.126.8    k8s-worker2   <none>           <none>
+jellyfin-6685498b77-mnb9d   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-pcr4z   0/1     Completed                0          23m    192.168.126.7    k8s-worker2   <none>           <none>
+jellyfin-6685498b77-qz4dc   0/1     Completed                0          33m    192.168.126.6    k8s-worker2   <none>           <none>
+jellyfin-6685498b77-rq4vm   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-s944h   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-sq82x   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-ss4b9   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-tfzjg   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-tmckh   0/1     Error                    0          30m    192.168.194.70   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-wfzxs   0/1     ContainerStatusUnknown   1          64m    192.168.126.5    k8s-worker2   <none>           <none>
+jellyfin-6685498b77-zbwsc   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+jellyfin-6685498b77-zcknx   0/1     Evicted                  0          22m    <none>           k8s-worker2   <none>           <none>
+cachiadmin@k8s-control:~/manifests$ kubectl delete pods --field-selector status.phase=Failed
+pod "jellyfin-6685498b77-2ssph" deleted
+pod "jellyfin-6685498b77-4kbkw" deleted
+pod "jellyfin-6685498b77-6k2c8" deleted
+pod "jellyfin-6685498b77-8qj8k" deleted
+pod "jellyfin-6685498b77-98vqv" deleted
+pod "jellyfin-6685498b77-9dbjk" deleted
+pod "jellyfin-6685498b77-9w49r" deleted
+pod "jellyfin-6685498b77-ctrfj" deleted
+pod "jellyfin-6685498b77-gb8z9" deleted
+pod "jellyfin-6685498b77-gpf9n" deleted
+pod "jellyfin-6685498b77-kp56n" deleted
+pod "jellyfin-6685498b77-mnb9d" deleted
+pod "jellyfin-6685498b77-rq4vm" deleted
+pod "jellyfin-6685498b77-s944h" deleted
+pod "jellyfin-6685498b77-sq82x" deleted
+pod "jellyfin-6685498b77-ss4b9" deleted
+pod "jellyfin-6685498b77-tfzjg" deleted
+pod "jellyfin-6685498b77-tmckh" deleted
+pod "jellyfin-6685498b77-wfzxs" deleted
+pod "jellyfin-6685498b77-zbwsc" deleted
+pod "jellyfin-6685498b77-zcknx" deleted
+cachiadmin@k8s-control:~/manifests$ vi ~/manifests/media-server/jellyfin.yaml
+cachiadmin@k8s-control:~/manifests$ vi ~/manifests/media-server/jellyfin.yaml
+cachiadmin@k8s-control:~/manifests$ kubectl apply -f ~/manifests/media-server/jellyfin.yaml
+deployment.apps/jellyfin configured
+service/jellyfin-svc unchanged
+cachiadmin@k8s-control:~/manifests$ kubectl get pods -w
+NAME                        READY   STATUS        RESTARTS   AGE
+jellyfin-6685498b77-4dq6l   0/1     Completed     0          25m
+jellyfin-6685498b77-jtqrk   0/1     Completed     0          51m
+jellyfin-6685498b77-kzxgr   1/1     Terminating   0          15m
+jellyfin-6685498b77-pcr4z   0/1     Completed     0          26m
+jellyfin-6685498b77-qz4dc   0/1     Completed     0          36m
+jellyfin-db648fdd6-lpfmp    1/1     Running       0          7s
+jellyfin-6685498b77-kzxgr   1/1     Terminating   0          15m
+jellyfin-6685498b77-kzxgr   0/1     Terminating   0          15m
+jellyfin-6685498b77-kzxgr   0/1     Terminating   0          15m
+jellyfin-6685498b77-kzxgr   0/1     Terminating   0          15m
+q^Ccachiadmin@k8s-control:~/manifests$ kubectl logs jellyfin-db648fdd6-lpfmp
+[21:20:16] [INF] [1] Emby.Server.Implementations.AppBase.BaseConfigurationManager: Setting cache path: /cache
+[21:20:16] [INF] [8] Jellyfin.Server.ServerSetupApp.SetupServer: Kestrel is listening on 0.0.0.0
+[21:20:16] [INF] [8] Main: Jellyfin version: 10.11.11
+[21:20:16] [INF] [8] Main: Environment Variables: ["[JELLYFIN_SVC_SERVICE_HOST, 10.106.199.249]", "[JELLYFIN_SVC_PORT_8096_TCP_PORT, 8096]", "[JELLYFIN_SVC_PORT_8096_TCP_ADDR, 10.106.199.249]", "[JELLYFIN_SVC_PORT_8096_TCP_PROTO, tcp]", "[JELLYFIN_SVC_PORT_8096_TCP, tcp://10.106.199.249:8096]", "[JELLYFIN_CONFIG_DIR, /config/config]", "[JELLYFIN_FFMPEG, /usr/lib/jellyfin-ffmpeg/ffmpeg]", "[JELLYFIN_SVC_SERVICE_PORT, 8096]", "[JELLYFIN_SVC_PORT, tcp://10.106.199.249:8096]", "[JELLYFIN_WEB_DIR, /jellyfin/jellyfin-web]", "[JELLYFIN_LOG_DIR, /config/log]", "[JELLYFIN_CACHE_DIR, /cache]", "[JELLYFIN_DATA_DIR, /config]"]
+[21:20:16] [INF] [8] Main: Arguments: ["/jellyfin/jellyfin.dll"]
+[21:20:16] [INF] [8] Main: Operating system: Debian GNU/Linux 13 (trixie)
+[21:20:16] [INF] [8] Main: Architecture: X64
+[21:20:16] [INF] [8] Main: 64-Bit Process: True
+[21:20:16] [INF] [8] Main: User Interactive: True
+[21:20:16] [INF] [8] Main: Processor count: 2
+[21:20:16] [INF] [8] Main: Program data path: /config
+[21:20:16] [INF] [8] Main: Log directory path: /config/log
+[21:20:16] [INF] [8] Main: Config directory path: /config/config
+[21:20:16] [INF] [8] Main: Cache path: /cache
+[21:20:16] [INF] [8] Main: Temp directory path: /tmp/jellyfin
+[21:20:16] [INF] [8] Main: Web resources path: /jellyfin/jellyfin-web
+[21:20:16] [INF] [8] Main: Application directory: /jellyfin/
+[21:20:16] [INF] [8] Jellyfin.Server.Startup: Storage path `/config/data` (Network) successfully checked with 1.7TiB free which is over the minimum of 2GiB.
+[21:20:16] [INF] [8] Jellyfin.Server.Startup: Storage path `/cache` (Network) successfully checked with 1.7TiB free which is over the minimum of 2GiB.
+[21:20:16] [INF] [8] Jellyfin.Server.Startup: Storage path `/config` (Network) successfully checked with 1.7TiB free which is over the minimum of 2GiB.
+[21:20:16] [INF] [8] Emby.Server.Implementations.AppBase.BaseConfigurationManager: Setting cache path: /cache
+[21:20:16] [INF] [8] Jellyfin.Database.Providers.Sqlite.SqliteDatabaseProvider: SQLite connection string: Data Source=/config/data/jellyfin.db;Cache=Default;Default Timeout=30;Pooling=True
+[21:20:16] [INF] [8] Jellyfin.Database.Providers.Sqlite.SqliteDatabaseProvider: SQLITE connection pragma command set to: 
+PRAGMA locking_mode=NORMAL;
+PRAGMA journal_size_limit=134217728;
+PRAGMA synchronous=1;
+PRAGMA temp_store=2;
+
+[21:20:16] [INF] [8] Jellyfin.Database.Implementations.Locking.NoLockBehavior: The database locking mode has been set to: NoLock.
+[21:20:16] [INF] [8] Jellyfin.Server.Migrations.JellyfinMigrationService: Initialise Migration service.
+[21:20:18] [INF] [8] Jellyfin.Server.Migrations.JellyfinMigrationService: There are 0 migrations for stage PreInitialisation.
+[21:20:18] [INF] [8] Emby.Server.Implementations.AppBase.BaseConfigurationManager: Setting cache path: /cache
+[21:20:18] [INF] [8] Emby.Server.Implementations.ApplicationHost: Loading assemblies
+[21:20:18] [INF] [8] Jellyfin.Networking.Manager.NetworkManager: Defined LAN subnets: ["127.0.0.1/8", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
+[21:20:18] [INF] [8] Jellyfin.Networking.Manager.NetworkManager: Defined LAN exclusions: []
+[21:20:18] [INF] [8] Jellyfin.Networking.Manager.NetworkManager: Used LAN subnets: ["127.0.0.1/8", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
+[21:20:18] [INF] [8] Jellyfin.Networking.Manager.NetworkManager: Filtered interface addresses: ["127.0.0.1", "192.168.126.9"]
+[21:20:18] [INF] [8] Jellyfin.Networking.Manager.NetworkManager: Bind Addresses ["0.0.0.0"]
+[21:20:18] [INF] [8] Jellyfin.Networking.Manager.NetworkManager: Remote IP filter is Allowlist
+[21:20:18] [INF] [8] Jellyfin.Networking.Manager.NetworkManager: Filtered subnets: []
+[21:20:19] [INF] [8] Jellyfin.Database.Providers.Sqlite.SqliteDatabaseProvider: SQLite connection string: Data Source=/config/data/jellyfin.db;Cache=Default;Default Timeout=30;Pooling=True
+[21:20:19] [INF] [8] Jellyfin.Database.Providers.Sqlite.SqliteDatabaseProvider: SQLITE connection pragma command set to: 
+PRAGMA locking_mode=NORMAL;
+PRAGMA journal_size_limit=134217728;
+PRAGMA synchronous=1;
+PRAGMA temp_store=2;
+
+[21:20:19] [INF] [8] Jellyfin.Database.Implementations.Locking.NoLockBehavior: The database locking mode has been set to: NoLock.
+[21:20:19] [INF] [8] Main: Prepare system for possible migrations
+[21:20:19] [INF] [8] Jellyfin.Server.Migrations.JellyfinMigrationService: There are 0 migrations for stage CoreInitialisation.
+[21:20:19] [INF] [8] Emby.Server.Implementations.Plugins.PluginManager: Loaded plugin: TMDb 10.11.11.0
+[21:20:19] [INF] [8] Emby.Server.Implementations.Plugins.PluginManager: Loaded plugin: Studio Images 10.11.11.0
+[21:20:19] [INF] [8] Emby.Server.Implementations.Plugins.PluginManager: Loaded plugin: OMDb 10.11.11.0
+[21:20:19] [INF] [8] Emby.Server.Implementations.Plugins.PluginManager: Loaded plugin: MusicBrainz 10.11.11.0
+[21:20:19] [INF] [8] Emby.Server.Implementations.Plugins.PluginManager: Loaded plugin: AudioDB 10.11.11.0
+[21:20:19] [INF] [8] Jellyfin.Server.Migrations.JellyfinMigrationService: There are 0 migrations for stage AppInitialisation.
+[21:20:20] [INF] [7] Main: Kestrel is listening on 0.0.0.0
+[21:20:20] [WRN] [12] Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager: No XML encryptor configured. Key {1c243e45-a66a-4809-8b6d-b82d916dd825} may be persisted to storage in unencrypted form.
+[21:20:21] [WRN] [7] Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware: The WebRootPath was not found: /wwwroot. Static files may be unavailable.
+[21:20:21] [INF] [7] Emby.Server.Implementations.ApplicationHost: Running startup tasks
+[21:20:21] [INF] [12] Emby.Server.Implementations.IO.LibraryMonitor: Watching directory /media
+[21:20:21] [INF] [7] Emby.Server.Implementations.ScheduledTasks.TaskManager: Daily trigger for Generate Trickplay Images set to fire at 2026-07-08 03:00:00.000 +00:00, which is 05:39:38.2443344 from now.
+[21:20:21] [INF] [7] Emby.Server.Implementations.ScheduledTasks.TaskManager: Daily trigger for Extract Chapter Images set to fire at 2026-07-08 02:00:00.000 +00:00, which is 04:39:38.2167472 from now.
+[21:20:21] [INF] [7] MediaBrowser.MediaEncoding.Encoder.MediaEncoder: Found ffmpeg version 7.1.4
+[21:20:21] [INF] [7] MediaBrowser.MediaEncoding.Encoder.MediaEncoder: Available decoders: ["libdav1d", "av1", "av1_cuvid", "av1_qsv", "h264", "h264_qsv", "h264_cuvid", "hevc", "hevc_qsv", "hevc_cuvid", "mpeg2video", "mpeg2_qsv", "mpeg2_cuvid", "mpeg4", "mpeg4_cuvid", "msmpeg4", "vc1_qsv", "vc1_cuvid", "vp8", "libvpx", "vp8_cuvid", "vp8_qsv", "vp9", "libvpx-vp9", "vp9_cuvid", "vp9_qsv", "aac", "ac3", "ac4", "dca", "flac", "mp3", "truehd"]
+[21:20:21] [INF] [7] MediaBrowser.MediaEncoding.Encoder.MediaEncoder: Available encoders: ["libsvtav1", "av1_nvenc", "av1_qsv", "av1_amf", "av1_vaapi", "libx264", "h264_amf", "h264_nvenc", "h264_qsv", "h264_v4l2m2m", "h264_vaapi", "libx265", "hevc_amf", "hevc_nvenc", "hevc_qsv", "hevc_vaapi", "mjpeg_qsv", "mjpeg_vaapi", "aac", "libfdk_aac", "ac3", "alac", "dca", "flac", "libmp3lame", "libopus", "truehd", "libvorbis", "srt"]
+[21:20:21] [INF] [7] MediaBrowser.MediaEncoding.Encoder.MediaEncoder: Available filters: ["bwdif_cuda", "bwdif_opencl", "deinterlace_qsv", "deinterlace_vaapi", "flip_vulkan", "hwupload_cuda", "hwupload_vaapi", "libplacebo", "overlay_opencl", "overlay_qsv", "overlay_vaapi", "overlay_vulkan", "overlay_cuda", "procamp_vaapi", "scale_cuda", "scale_opencl", "scale_qsv", "scale_vaapi", "scale_vulkan", "tonemapx", "tonemap_cuda", "tonemap_opencl", "tonemap_vaapi", "transpose_cuda", "transpose_opencl", "transpose_vaapi", "transpose_vulkan", "vpp_qsv", "yadif_cuda", "yadif_opencl", "zscale", "alphasrc"]
+[21:20:22] [INF] [7] MediaBrowser.MediaEncoding.Encoder.MediaEncoder: Available hwaccel types: ["cuda", "vaapi", "qsv", "drm", "opencl", "vulkan"]
+[21:20:24] [INF] [12] Emby.Server.Implementations.ScheduledTasks.TaskManager: Clean up collections and playlists Completed after 0 minute(s) and 0 seconds
+[21:20:24] [INF] [8] Emby.Server.Implementations.ScheduledTasks.TaskManager: Clean Transcode Directory Completed after 0 minute(s) and 0 seconds
+[21:20:29] [ERR] [12] Emby.Server.Implementations.Updates.InstallationManager: An error occurred while accessing the plugin manifest: https://repo.jellyfin.org/files/plugin/manifest.json
+System.Net.Http.HttpRequestException: Resource temporarily unavailable (repo.jellyfin.org:443)
+ ---> System.Net.Sockets.SocketException (11): Resource temporarily unavailable
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at Jellyfin.Networking.HappyEyeballs.HttpClientExtension.AttemptConnection(AddressFamily addressFamily, SocketsHttpConnectionContext context, CancellationToken cancellationToken)
+   at Jellyfin.Networking.HappyEyeballs.HttpClientExtension.OnConnect(SocketsHttpConnectionContext context, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.InjectNewHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.DecompressionHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at System.Net.Http.Json.HttpClientJsonExtensions.<FromJsonAsyncCore>g__Core|12_0[TValue,TJsonOptions](HttpClient client, Task`1 responseTask, Boolean usingResponseHeadersRead, CancellationTokenSource linkedCTS, Func`4 deserializeMethod, TJsonOptions jsonOptions, CancellationToken cancellationToken)
+   at Emby.Server.Implementations.Updates.InstallationManager.GetPackages(String manifestName, String manifest, Boolean filterIncompatible, CancellationToken cancellationToken)
+[21:20:29] [INF] [12] Emby.Server.Implementations.ScheduledTasks.TaskManager: Update Plugins Completed after 0 minute(s) and 4 seconds
+[21:20:37] [INF] [8] Emby.Server.Implementations.HttpServer.WebSocketManager: WS 192.168.68.113 request
+[21:20:38] [INF] [8] Emby.Server.Implementations.HttpServer.WebSocketManager: WS 192.168.68.113 closed
+[21:20:39] [INF] [7] MediaBrowser.MediaEncoding.Encoder.MediaEncoder: FFmpeg: /usr/lib/jellyfin-ffmpeg/ffmpeg
+[21:20:39] [INF] [7] Emby.Server.Implementations.ApplicationHost: ServerId: 03f3964205104f56b08fe1ffc4233434
+[21:20:39] [INF] [7] Emby.Server.Implementations.ApplicationHost: Core startup complete
+[21:20:39] [INF] [7] Main: Startup complete 0:00:23.8234729
+[21:20:42] [INF] [18] Emby.Server.Implementations.HttpServer.WebSocketManager: WS 192.168.68.113 request
+[21:20:57] [INF] [20] Jellyfin.Api.Helpers.MediaInfoHelper: User policy for root. EnablePlaybackRemuxing: True EnableVideoPlaybackTranscoding: True EnableAudioPlaybackTranscoding: True
+[21:20:58] [INF] [8] Jellyfin.Api.Controllers.DynamicHlsController: Current HLS implementation doesn't support non-keyframe breaks but one is requested, ignoring that request
+[21:20:58] [INF] [8] MediaBrowser.MediaEncoding.Transcoding.TranscodeManager: /usr/lib/jellyfin-ffmpeg/ffmpeg -analyzeduration 200M -probesize 1G -fflags +genpts  -i file:"/media/DemonSlayer/Demon.Slayer.Kimetsu.No.Yaiba.The.Movie.Infinity.Castle.2025.V2.1080p.TELESYNC.MULTi.x264-SyncUP.mkv" -map_metadata -1 -map_chapters -1 -threads 0 -map 0:0 -map 0:2 -map -0:s -codec:v:0 copy -bsf:v h264_mp4toannexb -start_at_zero -codec:a:0 copy -copyts -avoid_negative_ts disabled -max_muxing_queue_size 2048 -f hls -max_delay 5000000 -hls_time 6 -hls_segment_type fmp4 -hls_fmp4_init_filename "19432d388f93896ff278b86161d01395-1.mp4" -start_number 0 -hls_segment_filename "/cache/transcodes/19432d388f93896ff278b86161d01395%d.mp4" -hls_playlist_type vod -hls_list_size 0 -hls_segment_options movflags=+frag_discont -y "/cache/transcodes/19432d388f93896ff278b86161d01395.m3u8"
+[21:22:05] [INF] [26] MediaBrowser.Controller.MediaEncoding.TranscodingJob: Stopping ffmpeg process with q command for /cache/transcodes/19432d388f93896ff278b86161d01395.m3u8
+[21:22:05] [INF] [26] MediaBrowser.MediaEncoding.Transcoding.TranscodeManager: FFmpeg exited with code 0
+[21:22:05] [INF] [26] Jellyfin.Api.Controllers.DynamicHlsController: Current HLS implementation doesn't support non-keyframe breaks but one is requested, ignoring that request
+[21:22:05] [INF] [26] MediaBrowser.MediaEncoding.Transcoding.TranscodeManager: /usr/lib/jellyfin-ffmpeg/ffmpeg -analyzeduration 200M -probesize 1G -ss 01:51:43.042 -noaccurate_seek -fflags +genpts  -i file:"/media/DemonSlayer/Demon.Slayer.Kimetsu.No.Yaiba.The.Movie.Infinity.Castle.2025.V2.1080p.TELESYNC.MULTi.x264-SyncUP.mkv" -map_metadata -1 -map_chapters -1 -threads 0 -map 0:0 -map 0:2 -map -0:s -codec:v:0 copy -bsf:v h264_mp4toannexb -start_at_zero -codec:a:0 copy -copyts -avoid_negative_ts disabled -max_muxing_queue_size 2048 -f hls -max_delay 5000000 -hls_time 6 -hls_segment_type fmp4 -hls_fmp4_init_filename "19432d388f93896ff278b86161d01395-1.mp4" -start_number 1117 -hls_segment_filename "/cache/transcodes/19432d388f93896ff278b86161d01395%d.mp4" -hls_playlist_type vod -hls_list_size 0 -hls_segment_options movflags=+frag_discont -y "/cache/transcodes/19432d388f93896ff278b86161d01395.m3u8"
+[21:22:06] [INF] [20] MediaBrowser.Controller.MediaEncoding.TranscodingJob: Stopping ffmpeg process with q command for /cache/transcodes/19432d388f93896ff278b86161d01395.m3u8
+[21:22:06] [INF] [20] MediaBrowser.MediaEncoding.Transcoding.TranscodeManager: FFmpeg exited with code 0
+[21:22:06] [INF] [20] Jellyfin.Api.Controllers.DynamicHlsController: Current HLS implementation doesn't support non-keyframe breaks but one is requested, ignoring that request
+[21:22:06] [INF] [20] MediaBrowser.MediaEncoding.Transcoding.TranscodeManager: /usr/lib/jellyfin-ffmpeg/ffmpeg -analyzeduration 200M -probesize 1G -ss 02:05:48.583 -noaccurate_seek -fflags +genpts  -i file:"/media/DemonSlayer/Demon.Slayer.Kimetsu.No.Yaiba.The.Movie.Infinity.Castle.2025.V2.1080p.TELESYNC.MULTi.x264-SyncUP.mkv" -map_metadata -1 -map_chapters -1 -threads 0 -map 0:0 -map 0:2 -map -0:s -codec:v:0 copy -bsf:v h264_mp4toannexb -start_at_zero -codec:a:0 copy -copyts -avoid_negative_ts disabled -max_muxing_queue_size 2048 -f hls -max_delay 5000000 -hls_time 6 -hls_segment_type fmp4 -hls_fmp4_init_filename "19432d388f93896ff278b86161d01395-1.mp4" -start_number 1258 -hls_segment_filename "/cache/transcodes/19432d388f93896ff278b86161d01395%d.mp4" -hls_playlist_type vod -hls_list_size 0 -hls_segment_options movflags=+frag_discont -y "/cache/transcodes/19432d388f93896ff278b86161d01395.m3u8"
+[21:22:25] [INF] [27] MediaBrowser.MediaEncoding.Transcoding.TranscodeManager: FFmpeg exited with code 0
+cachiadmin@k8s-control:~/manifests$ 
