@@ -9,3 +9,7 @@ MACADDR:bc:24:11:ac:76:f0
 hostname:k8s-worker2
 IPADDR:192.168.68.115/24
 MACADDR:bc:24:11:e2:7d:ec
+
+hostname:k8s-netbook
+IPADDR:192.168.68.109/24
+MACADDR:ec-5c-68-8d7c-b9

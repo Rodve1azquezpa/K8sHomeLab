@@ -1,0 +1,1081 @@
+Last login: Wed Jul  8 13:51:27 on ttys000
+rovelazq@ROVELAZQ-M-PPV9 ~ % clnb
+The authenticity of host '192.168.68.109 (192.168.68.109)' can't be established.
+ED25519 key fingerprint is: SHA256:9Efb3QmthGbfUK8kdijpkEueQM1HV9AewL3TUWw/tkI
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '192.168.68.109' (ED25519) to the list of known hosts.
+cachiadmin@192.168.68.109's password: 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Wed Jul  8 08:11:32 PM UTC 2026
+
+  System load:  0.05               Temperature:             50.0 C
+  Usage of /:   23.3% of 26.99GB   Processes:               121
+  Memory usage: 6%                 Users logged in:         1
+  Swap usage:   0%                 IPv4 address for wlp4s0: 192.168.68.109
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+29 updates can be applied immediately.
+1 of these updates is a standard security update.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+cachiadmin@k8s-netbook:~$ cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+sudo modprobe overlay && sudo modprobe br_netfilter
+[sudo] password for cachiadmin: 
+overlay
+br_netfilter
+cachiadmin@k8s-netbook:~$ cat /etc/modules-load.d/k8s.conf 
+overlay
+br_netfilter
+cachiadmin@k8s-netbook:~$ cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+sudo sysctl --system
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+* Applying /usr/lib/sysctl.d/10-apparmor.conf ...
+* Applying /etc/sysctl.d/10-bufferbloat.conf ...
+* Applying /etc/sysctl.d/10-console-messages.conf ...
+* Applying /etc/sysctl.d/10-ipv6-privacy.conf ...
+* Applying /etc/sysctl.d/10-kernel-hardening.conf ...
+* Applying /etc/sysctl.d/10-magic-sysrq.conf ...
+* Applying /etc/sysctl.d/10-map-count.conf ...
+* Applying /etc/sysctl.d/10-network-security.conf ...
+* Applying /etc/sysctl.d/10-ptrace.conf ...
+* Applying /etc/sysctl.d/10-zeropage.conf ...
+* Applying /usr/lib/sysctl.d/50-pid-max.conf ...
+* Applying /usr/lib/sysctl.d/99-protect-links.conf ...
+* Applying /etc/sysctl.d/99-sysctl.conf ...
+* Applying /etc/sysctl.d/k8s.conf ...
+* Applying /etc/sysctl.conf ...
+kernel.apparmor_restrict_unprivileged_userns = 1
+net.core.default_qdisc = fq_codel
+kernel.printk = 4 4 1 7
+net.ipv6.conf.all.use_tempaddr = 2
+net.ipv6.conf.default.use_tempaddr = 2
+kernel.kptr_restrict = 1
+kernel.sysrq = 176
+vm.max_map_count = 1048576
+net.ipv4.conf.default.rp_filter = 2
+net.ipv4.conf.all.rp_filter = 2
+kernel.yama.ptrace_scope = 1
+vm.mmap_min_addr = 65536
+kernel.pid_max = 4194304
+fs.protected_fifos = 1
+fs.protected_hardlinks = 1
+fs.protected_regular = 2
+fs.protected_symlinks = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward = 1
+cachiadmin@k8s-netbook:~$ sudo apt-get update
+Hit:1 http://security.ubuntu.com/ubuntu noble-security InRelease
+Hit:2 http://archive.ubuntu.com/ubuntu noble InRelease
+Hit:3 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:4 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Reading package lists... Done
+cachiadmin@k8s-netbook:~$ sudo apt-get install -y ca-certificates curl gnupg lsb-release
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+ca-certificates is already the newest version (20260601~24.04.1).
+ca-certificates set to manually installed.
+curl is already the newest version (8.5.0-2ubuntu10.10).
+curl set to manually installed.
+gnupg is already the newest version (2.4.4-2ubuntu17.4).
+gnupg set to manually installed.
+lsb-release is already the newest version (12.0-2).
+lsb-release set to manually installed.
+0 upgraded, 0 newly installed, 0 to remove and 29 not upgraded.
+cachiadmin@k8s-netbook:~$ sudo mkdir -p /etc/apt/keyrings
+cachiadmin@k8s-netbook:~$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+cachiadmin@k8s-netbook:~$ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+cachiadmin@k8s-netbook:~$ sudo apt-get update && sudo apt-get install -y containerd.io
+Get:1 https://download.docker.com/linux/ubuntu noble InRelease [48.5 kB]
+Hit:2 http://archive.ubuntu.com/ubuntu noble InRelease                     
+Hit:3 http://security.ubuntu.com/ubuntu noble-security InRelease
+Hit:4 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:5 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Get:6 https://download.docker.com/linux/ubuntu noble/stable amd64 Packages [59.4 kB]
+Fetched 108 kB in 1s (95.5 kB/s)   
+Reading package lists... Done
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following NEW packages will be installed:
+  containerd.io
+0 upgraded, 1 newly installed, 0 to remove and 29 not upgraded.
+Need to get 23.6 MB of archives.
+After this operation, 93.5 MB of additional disk space will be used.
+Get:1 https://download.docker.com/linux/ubuntu noble/stable amd64 containerd.io amd64 2.2.5-1~ubuntu.24.04~noble [23.6 MB]
+Fetched 23.6 MB in 3s (8928 kB/s)         
+Selecting previously unselected package containerd.io.
+(Reading database ... 88331 files and directories currently installed.)
+Preparing to unpack .../containerd.io_2.2.5-1~ubuntu.24.04~noble_amd64.deb ...
+Unpacking containerd.io (2.2.5-1~ubuntu.24.04~noble) ...
+Setting up containerd.io (2.2.5-1~ubuntu.24.04~noble) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/containerd.service → /usr/lib/systemd/system/containerd.service.
+Processing triggers for man-db (2.12.0-4build2) ...
+Scanning processes...                                                                                                                                                                                                                                                                      
+Scanning processor microcode...                                                                                                                                                                                                                                                            
+Scanning linux images...                                                                                                                                                                                                                                                                   
+
+Running kernel seems to be up-to-date.
+
+The processor microcode seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+cachiadmin@k8s-netbook:~$ sudo mkdir -p /etc/containerd
+cachiadmin@k8s-netbook:~$ containerd config default | sudo tee /etc/containerd/config.toml
+version = 3
+root = '/var/lib/containerd'
+state = '/run/containerd'
+temp = ''
+disabled_plugins = []
+required_plugins = []
+oom_score = 0
+imports = ['/etc/containerd/conf.d/*.toml']
+
+[grpc]
+  address = '/run/containerd/containerd.sock'
+  tcp_address = ''
+  tcp_tls_ca = ''
+  tcp_tls_cert = ''
+  tcp_tls_key = ''
+  uid = 0
+  gid = 0
+  max_recv_message_size = 16777216
+  max_send_message_size = 16777216
+  tcp_tls_common_name = ''
+
+[ttrpc]
+  address = ''
+  uid = 0
+  gid = 0
+
+[debug]
+  address = ''
+  uid = 0
+  gid = 0
+  level = ''
+  format = ''
+
+[metrics]
+  address = ''
+  grpc_histogram = false
+
+[plugins]
+  [plugins.'io.containerd.cri.v1.images']
+    snapshotter = 'overlayfs'
+    disable_snapshot_annotations = true
+    discard_unpacked_layers = false
+    max_concurrent_downloads = 3
+    concurrent_layer_fetch_buffer = 0
+    image_pull_progress_timeout = '5m0s'
+    image_pull_with_sync_fs = false
+    stats_collect_period = 10
+    use_local_image_pull = false
+
+    [plugins.'io.containerd.cri.v1.images'.pinned_images]
+      sandbox = 'registry.k8s.io/pause:3.10.1'
+
+    [plugins.'io.containerd.cri.v1.images'.registry]
+      config_path = ''
+
+    [plugins.'io.containerd.cri.v1.images'.image_decryption]
+      key_model = 'node'
+
+  [plugins.'io.containerd.cri.v1.runtime']
+    enable_selinux = false
+    selinux_category_range = 1024
+    max_container_log_line_size = 16384
+    disable_apparmor = false
+    restrict_oom_score_adj = false
+    disable_proc_mount = false
+    unset_seccomp_profile = ''
+    tolerate_missing_hugetlb_controller = true
+    disable_hugetlb_controller = true
+    device_ownership_from_security_context = false
+    ignore_image_defined_volumes = false
+    netns_mounts_under_state_dir = false
+    enable_unprivileged_ports = true
+    enable_unprivileged_icmp = true
+    enable_cdi = true
+    cdi_spec_dirs = ['/etc/cdi', '/var/run/cdi']
+    drain_exec_sync_io_timeout = '0s'
+    ignore_deprecation_warnings = []
+
+    [plugins.'io.containerd.cri.v1.runtime'.containerd]
+      default_runtime_name = 'runc'
+      ignore_blockio_not_enabled_errors = false
+      ignore_rdt_not_enabled_errors = false
+
+      [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes]
+        [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc]
+          runtime_type = 'io.containerd.runc.v2'
+          runtime_path = ''
+          pod_annotations = []
+          container_annotations = []
+          privileged_without_host_devices = false
+          privileged_without_host_devices_all_devices_allowed = false
+          cgroup_writable = false
+          base_runtime_spec = ''
+          cni_conf_dir = ''
+          cni_max_conf_num = 0
+          snapshotter = ''
+          sandboxer = 'podsandbox'
+          io_type = ''
+
+          [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc.options]
+            BinaryName = ''
+            CriuImagePath = ''
+            CriuWorkPath = ''
+            IoGid = 0
+            IoUid = 0
+            NoNewKeyring = false
+            Root = ''
+            ShimCgroup = ''
+            SystemdCgroup = false
+
+    [plugins.'io.containerd.cri.v1.runtime'.cni]
+      bin_dir = ''
+      bin_dirs = ['/opt/cni/bin']
+      conf_dir = '/etc/cni/net.d'
+      max_conf_num = 1
+      setup_serially = false
+      conf_template = ''
+      ip_pref = ''
+      use_internal_loopback = false
+
+  [plugins.'io.containerd.differ.v1.erofs']
+    mkfs_options = []
+    enable_tar_index = false
+
+  [plugins.'io.containerd.gc.v1.scheduler']
+    pause_threshold = 0.02
+    deletion_threshold = 0
+    mutation_threshold = 100
+    schedule_delay = '0s'
+    startup_delay = '100ms'
+
+  [plugins.'io.containerd.grpc.v1.cri']
+    disable_tcp_service = true
+    stream_server_address = '127.0.0.1'
+    stream_server_port = '0'
+    stream_idle_timeout = '4h0m0s'
+    enable_tls_streaming = false
+
+    [plugins.'io.containerd.grpc.v1.cri'.x509_key_pair_streaming]
+      tls_cert_file = ''
+      tls_key_file = ''
+
+  [plugins.'io.containerd.image-verifier.v1.bindir']
+    bin_dir = '/opt/containerd/image-verifier/bin'
+    max_verifiers = 10
+    per_verifier_timeout = '10s'
+
+  [plugins.'io.containerd.internal.v1.opt']
+    path = '/opt/containerd'
+
+  [plugins.'io.containerd.internal.v1.tracing']
+
+  [plugins.'io.containerd.metadata.v1.bolt']
+    content_sharing_policy = 'shared'
+    no_sync = false
+
+  [plugins.'io.containerd.monitor.container.v1.restart']
+    interval = '10s'
+
+  [plugins.'io.containerd.monitor.task.v1.cgroups']
+    no_prometheus = false
+
+  [plugins.'io.containerd.mount-handler.v1.erofs']
+
+  [plugins.'io.containerd.nri.v1.nri']
+    disable = false
+    socket_path = '/var/run/nri/nri.sock'
+    plugin_path = '/opt/nri/plugins'
+    plugin_config_path = '/etc/nri/conf.d'
+    plugin_registration_timeout = '5s'
+    plugin_request_timeout = '2s'
+    disable_connections = false
+
+    [plugins.'io.containerd.nri.v1.nri'.default_validator]
+      enable = false
+      reject_oci_hook_adjustment = false
+      reject_runtime_default_seccomp_adjustment = false
+      reject_unconfined_seccomp_adjustment = false
+      reject_custom_seccomp_adjustment = false
+      reject_namespace_adjustment = false
+      reject_sysctl_adjustment = false
+      required_plugins = []
+      tolerate_missing_plugins_annotation = ''
+
+  [plugins.'io.containerd.runtime.v2.task']
+    platforms = ['linux/amd64']
+
+  [plugins.'io.containerd.service.v1.diff-service']
+    default = ['walking']
+    sync_fs = false
+
+  [plugins.'io.containerd.service.v1.tasks-service']
+    blockio_config_file = ''
+    rdt_config_file = ''
+
+  [plugins.'io.containerd.shim.v1.manager']
+    env = []
+
+  [plugins.'io.containerd.snapshotter.v1.blockfile']
+    root_path = ''
+    scratch_file = ''
+    fs_type = ''
+    mount_options = []
+    recreate_scratch = false
+
+  [plugins.'io.containerd.snapshotter.v1.btrfs']
+    root_path = ''
+
+  [plugins.'io.containerd.snapshotter.v1.devmapper']
+    root_path = ''
+    pool_name = ''
+    base_image_size = ''
+    async_remove = false
+    discard_blocks = false
+    fs_type = ''
+    fs_options = ''
+
+  [plugins.'io.containerd.snapshotter.v1.erofs']
+    root_path = ''
+    ovl_mount_options = []
+    enable_fsverity = false
+    set_immutable = false
+    default_size = ''
+
+  [plugins.'io.containerd.snapshotter.v1.native']
+    root_path = ''
+
+  [plugins.'io.containerd.snapshotter.v1.overlayfs']
+    root_path = ''
+    upperdir_label = false
+    sync_remove = false
+    slow_chown = false
+    mount_options = []
+
+  [plugins.'io.containerd.snapshotter.v1.zfs']
+    root_path = ''
+
+  [plugins.'io.containerd.tracing.processor.v1.otlp']
+
+  [plugins.'io.containerd.transfer.v1.local']
+    max_concurrent_downloads = 3
+    concurrent_layer_fetch_buffer = 0
+    max_concurrent_uploaded_layers = 3
+    check_platform_supported = false
+    config_path = ''
+    max_concurrent_unpacks = 1
+
+[cgroup]
+  path = ''
+
+[timeouts]
+  'io.containerd.timeout.bolt.open' = '0s'
+  'io.containerd.timeout.cri.defercleanup' = '1m0s'
+  'io.containerd.timeout.metrics.shimstats' = '2s'
+  'io.containerd.timeout.shim.cleanup' = '5s'
+  'io.containerd.timeout.shim.load' = '5s'
+  'io.containerd.timeout.shim.shutdown' = '3s'
+  'io.containerd.timeout.task.state' = '2s'
+
+[stream_processors]
+  [stream_processors.'io.containerd.ocicrypt.decoder.v1.tar']
+    accepts = ['application/vnd.oci.image.layer.v1.tar+encrypted']
+    returns = 'application/vnd.oci.image.layer.v1.tar'
+    path = 'ctd-decoder'
+    args = ['--decryption-keys-path', '/etc/containerd/ocicrypt/keys']
+    env = ['OCICRYPT_KEYPROVIDER_CONFIG=/etc/containerd/ocicrypt/ocicrypt_keyprovider.conf']
+
+  [stream_processors.'io.containerd.ocicrypt.decoder.v1.tar.gzip']
+    accepts = ['application/vnd.oci.image.layer.v1.tar+gzip+encrypted']
+    returns = 'application/vnd.oci.image.layer.v1.tar+gzip'
+    path = 'ctd-decoder'
+    args = ['--decryption-keys-path', '/etc/containerd/ocicrypt/keys']
+    env = ['OCICRYPT_KEYPROVIDER_CONFIG=/etc/containerd/ocicrypt/ocicrypt_keyprovider.conf']
+cachiadmin@k8s-netbook:~$ sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
+cachiadmin@k8s-netbook:~$ sudo systemctl restart containerd && sudo systemctl enable containerd
+cachiadmin@k8s-netbook:~$ curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+cachiadmin@k8s-netbook:~$ echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /
+cachiadmin@k8s-netbook:~$ sudo apt-get update && sudo apt-get install -y kubelet kubeadm kubectl
+Hit:2 https://download.docker.com/linux/ubuntu noble InRelease                                    
+Hit:3 http://security.ubuntu.com/ubuntu noble-security InRelease                                  
+Hit:4 http://archive.ubuntu.com/ubuntu noble InRelease                      
+Get:1 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.30/deb  InRelease [1192 B]
+Hit:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:6 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Get:7 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.30/deb  Packages [20.3 kB]
+Fetched 21.5 kB in 1s (17.3 kB/s)
+Reading package lists... Done
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  conntrack cri-tools kubernetes-cni
+The following NEW packages will be installed:
+  conntrack cri-tools kubeadm kubectl kubelet kubernetes-cni
+0 upgraded, 6 newly installed, 0 to remove and 29 not upgraded.
+Need to get 93.8 MB of archives.
+After this operation, 343 MB of additional disk space will be used.
+Get:3 http://archive.ubuntu.com/ubuntu noble/main amd64 conntrack amd64 1:1.4.8-1ubuntu1 [37.9 kB]  
+Get:1 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.30/deb  cri-tools 1.30.1-1.1 [21.3 MB]
+Get:2 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.30/deb  kubeadm 1.30.14-1.1 [10.5 MB]
+Get:4 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.30/deb  kubectl 1.30.14-1.1 [10.9 MB]
+Get:5 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.30/deb  kubernetes-cni 1.4.0-1.1 [32.9 MB]
+Get:6 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.30/deb  kubelet 1.30.14-1.1 [18.2 MB]                                                                                                                                                               
+Fetched 93.8 MB in 10s (9529 kB/s)                                                                                                                                                                                                                                                        
+Selecting previously unselected package conntrack.
+(Reading database ... 88345 files and directories currently installed.)
+Preparing to unpack .../0-conntrack_1%3a1.4.8-1ubuntu1_amd64.deb ...
+Unpacking conntrack (1:1.4.8-1ubuntu1) ...
+Selecting previously unselected package cri-tools.
+Preparing to unpack .../1-cri-tools_1.30.1-1.1_amd64.deb ...
+Unpacking cri-tools (1.30.1-1.1) ...
+Selecting previously unselected package kubeadm.
+Preparing to unpack .../2-kubeadm_1.30.14-1.1_amd64.deb ...
+Unpacking kubeadm (1.30.14-1.1) ...
+Selecting previously unselected package kubectl.
+Preparing to unpack .../3-kubectl_1.30.14-1.1_amd64.deb ...
+Unpacking kubectl (1.30.14-1.1) ...
+Selecting previously unselected package kubernetes-cni.
+Preparing to unpack .../4-kubernetes-cni_1.4.0-1.1_amd64.deb ...
+Unpacking kubernetes-cni (1.4.0-1.1) ...
+Selecting previously unselected package kubelet.
+Preparing to unpack .../5-kubelet_1.30.14-1.1_amd64.deb ...
+Unpacking kubelet (1.30.14-1.1) ...
+Setting up conntrack (1:1.4.8-1ubuntu1) ...
+Setting up kubectl (1.30.14-1.1) ...
+Setting up cri-tools (1.30.1-1.1) ...
+Setting up kubernetes-cni (1.4.0-1.1) ...
+Setting up kubeadm (1.30.14-1.1) ...
+Setting up kubelet (1.30.14-1.1) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Scanning processes...                                                                                                                                                                                                                                                                      
+Scanning processor microcode...                                                                                                                                                                                                                                                            
+Scanning linux images...                                                                                                                                                                                                                                                                   
+
+Running kernel seems to be up-to-date.
+
+The processor microcode seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+cachiadmin@k8s-netbook:~$ sudo apt-mark hold kubelet kubeadm kubectl
+kubelet set on hold.
+kubeadm set on hold.
+kubectl set on hold.
+cachiadmin@k8s-netbook:~$ sudo systemctl enable kubelet
+cachiadmin@k8s-netbook:~$ exit
+logout
+Connection to 192.168.68.109 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Wed Jul  8 08:20:36 PM UTC 2026
+
+  System load:  0.21               Processes:              208
+  Usage of /:   63.4% of 13.67GB   Users logged in:        0
+  Memory usage: 33%                IPv4 address for ens18: 192.168.68.101
+  Swap usage:   0%
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+28 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Wed Jul  8 00:53:57 2026 from 192.168.68.109
+cachiadmin@k8s-control:~$ kubeadm token create --print-join-command
+kubeadm join 192.168.68.101:6443 --token 4uhsi2.aeqgbwzvga1j5eph --discovery-token-ca-cert-hash sha256:acbf380c69cca2325c9034f44481d7203078f8b2036bdfc5040ebb954ee0dde0 
+cachiadmin@k8s-control:~$ exit
+logout
+Connection to 192.168.68.101 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clnb  
+cachiadmin@192.168.68.109's password: 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Wed Jul  8 08:21:07 PM UTC 2026
+
+  System load:  0.23               Temperature:             50.0 C
+  Usage of /:   25.2% of 26.99GB   Processes:               124
+  Memory usage: 7%                 Users logged in:         1
+  Swap usage:   0%                 IPv4 address for wlp4s0: 192.168.68.109
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+28 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Wed Jul  8 20:11:33 2026 from 192.168.68.104
+cachiadmin@k8s-netbook:~$ kubeadm join 192.168.68.101:6443 --token 4uhsi2.aeqgbwzvga1j5eph --discovery-token-ca-cert-hash sha256:acbf380c69cca2325c9034f44481d7203078f8b2036bdfc5040ebb954ee0dde0
+[preflight] Running pre-flight checks
+error execution phase preflight: [preflight] Some fatal errors occurred:
+	[ERROR IsPrivilegedUser]: user is not running as root
+[preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
+To see the stack trace of this error execute with --v=5 or higher
+cachiadmin@k8s-netbook:~$ sudo kubeadm join 192.168.68.101:6443 --token 4uhsi2.aeqgbwzvga1j5eph --discovery-token-ca-cert-hash sha256:acbf380c69cca2325c9034f44481d7203078f8b2036bdfc5040ebb954ee0dde0 
+[sudo] password for cachiadmin: 
+[preflight] Running pre-flight checks
+[preflight] Reading configuration from the cluster...
+[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[kubelet-start] Starting the kubelet
+[kubelet-check] Waiting for a healthy kubelet at http://127.0.0.1:10248/healthz. This can take up to 4m0s
+[kubelet-check] The kubelet is healthy after 1.003236955s
+[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap
+
+This node has joined the cluster:
+* Certificate signing request was sent to apiserver and a response was received.
+* The Kubelet was informed of the new secure connection details.
+
+Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
+
+cachiadmin@k8s-netbook:~$ kubectl get nodes
+E0708 20:21:58.909191    3362 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
+E0708 20:21:58.910387    3362 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
+E0708 20:21:58.912442    3362 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
+E0708 20:21:58.913005    3362 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
+E0708 20:21:58.914983    3362 memcache.go:265] couldn't get current server API group list: Get "http://localhost:8080/api?timeout=32s": dial tcp 127.0.0.1:8080: connect: connection refused
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+cachiadmin@k8s-netbook:~$ exit
+logout
+Connection to 192.168.68.109 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Wed Jul  8 08:22:26 PM UTC 2026
+
+  System load:  0.94               Processes:              209
+  Usage of /:   63.4% of 13.67GB   Users logged in:        0
+  Memory usage: 34%                IPv4 address for ens18: 192.168.68.101
+  Swap usage:   0%
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+28 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Wed Jul  8 20:20:37 2026 from 192.168.68.104
+cachiadmin@k8s-control:~$ kubectl get nodes
+NAME          STATUS   ROLES           AGE     VERSION
+k8s-control   Ready    control-plane   4d23h   v1.30.14
+k8s-netbook   Ready    <none>          57s     v1.30.14
+k8s-worker1   Ready    <none>          4d23h   v1.30.14
+k8s-worker2   Ready    <none>          4d23h   v1.30.14
+cachiadmin@k8s-control:~$ kubectl get nodes -o wide
+NAME          STATUS   ROLES           AGE     VERSION    INTERNAL-IP      EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+k8s-control   Ready    control-plane   4d23h   v1.30.14   192.168.68.101   <none>        Ubuntu 24.04.4 LTS   6.8.0-134-generic   containerd://2.2.5
+k8s-netbook   Ready    <none>          63s     v1.30.14   192.168.68.109   <none>        Ubuntu 24.04.4 LTS   6.8.0-134-generic   containerd://2.2.5
+k8s-worker1   Ready    <none>          4d23h   v1.30.14   192.168.68.113   <none>        Ubuntu 24.04.4 LTS   6.8.0-134-generic   containerd://2.2.5
+k8s-worker2   Ready    <none>          4d23h   v1.30.14   192.168.68.115   <none>        Ubuntu 24.04.4 LTS   6.8.0-134-generic   containerd://2.2.5
+cachiadmin@k8s-control:~$ kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+jellyfin-6685498b77-4dq6l   0/1     Completed   0          23h
+jellyfin-6685498b77-jtqrk   0/1     Completed   0          23h
+jellyfin-db648fdd6-dw57c    1/1     Running     0          21h
+cachiadmin@k8s-control:~$ kubectl get pods -o wide
+NAME                        READY   STATUS      RESTARTS   AGE   IP               NODE          NOMINATED NODE   READINESS GATES
+jellyfin-6685498b77-4dq6l   0/1     Completed   0          23h   192.168.194.71   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-jtqrk   0/1     Completed   0          23h   192.168.194.68   k8s-worker1   <none>           <none>
+jellyfin-db648fdd6-dw57c    1/1     Running     0          21h   192.168.194.72   k8s-worker1   <none>           <none>
+cachiadmin@k8s-control:~$ kubectl delete jellyfin-db648fdd6-dw57c
+error: the server doesn't have a resource type "jellyfin-db648fdd6-dw57c"
+cachiadmin@k8s-control:~$ kubectl delete pod jellyfin-db648fdd6-dw57c
+pod "jellyfin-db648fdd6-dw57c" deleted
+cachiadmin@k8s-control:~$ kubectl get pods -o wide -w
+NAME                        READY   STATUS      RESTARTS   AGE   IP               NODE          NOMINATED NODE   READINESS GATES
+jellyfin-6685498b77-4dq6l   0/1     Completed   0          23h   192.168.194.71   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-jtqrk   0/1     Completed   0          23h   192.168.194.68   k8s-worker1   <none>           <none>
+jellyfin-db648fdd6-dvx6h    1/1     Running     0          7s    192.168.126.10   k8s-worker2   <none>           <none>
+^Ccachiadmin@k8s-control:~$ kubectl delete pod jellyfin
+Error from server (NotFound): pods "jellyfin" not found
+cachiadmin@k8s-control:~$ kubectl delete pod jellyfin*
+Error from server (NotFound): pods "jellyfin*" not found
+cachiadmin@k8s-control:~$ kubectl delete pod jellyfin-*
+Error from server (NotFound): pods "jellyfin-*" not found
+cachiadmin@k8s-control:~$ kubectl delete pod jellyfin-db648fdd6-dvx6h
+pod "jellyfin-db648fdd6-dvx6h" deleted
+^[[A^[[A^[[Acachiadmin@k8s-control:~$ kubectl get pods -o wide -w
+NAME                        READY   STATUS              RESTARTS   AGE   IP               NODE          NOMINATED NODE   READINESS GATES
+jellyfin-6685498b77-4dq6l   0/1     Completed           0          23h   192.168.194.71   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-jtqrk   0/1     Completed           0          23h   192.168.194.68   k8s-worker1   <none>           <none>
+jellyfin-db648fdd6-wtxtb    0/1     ContainerCreating   0          3s    <none>           k8s-netbook   <none>           <none>
+^Ccachiadmin@k8s-control:~$ kubectl get pods -o wide
+NAME                        READY   STATUS              RESTARTS   AGE    IP               NODE          NOMINATED NODE   READINESS GATES
+jellyfin-6685498b77-4dq6l   0/1     Completed           0          23h    192.168.194.71   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-jtqrk   0/1     Completed           0          23h    192.168.194.68   k8s-worker1   <none>           <none>
+jellyfin-db648fdd6-wtxtb    0/1     ContainerCreating   0          2m7s   <none>           k8s-netbook   <none>           <none>
+cachiadmin@k8s-control:~$ kubectl log k8s-netbook
+error: unknown command "log" for "kubectl"
+
+Did you mean this?
+	top
+	logs
+cachiadmin@k8s-control:~$ kubectl logs k8s-netbook
+error: error from server (NotFound): pods "k8s-netbook" not found in namespace "default"
+cachiadmin@k8s-control:~$ kubectl logs jellyfin-db648fdd6-wtxtb 
+Error from server (BadRequest): container "jellyfin" in pod "jellyfin-db648fdd6-wtxtb" is waiting to start: ContainerCreating
+cachiadmin@k8s-control:~$ kubectl logs k8s-netbook
+error: error from server (NotFound): pods "k8s-netbook" not found in namespace "default"
+cachiadmin@k8s-control:~$ kubectl get pods -o wide
+NAME                        READY   STATUS              RESTARTS   AGE     IP               NODE          NOMINATED NODE   READINESS GATES
+jellyfin-6685498b77-4dq6l   0/1     Completed           0          23h     192.168.194.71   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-jtqrk   0/1     Completed           0          24h     192.168.194.68   k8s-worker1   <none>           <none>
+jellyfin-db648fdd6-wtxtb    0/1     ContainerCreating   0          4m49s   <none>           k8s-netbook   <none>           <none>
+cachiadmin@k8s-control:~$ kubectl describe pod jellyfin-db648fdd6-wtxtb 
+Name:             jellyfin-db648fdd6-wtxtb
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             k8s-netbook/192.168.68.109
+Start Time:       Wed, 08 Jul 2026 20:25:34 +0000
+Labels:           app=jellyfin
+                  pod-template-hash=db648fdd6
+Annotations:      <none>
+Status:           Pending
+IP:               
+IPs:              <none>
+Controlled By:    ReplicaSet/jellyfin-db648fdd6
+Containers:
+  jellyfin:
+    Container ID:   
+    Image:          jellyfin/jellyfin:latest
+    Image ID:       
+    Port:           8096/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       ContainerCreating
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /cache from nas-storage (rw,path="jellyfin-cache")
+      /config from nas-storage (rw,path="jellyfin-config")
+      /media from nas-storage (rw,path="jellyfin-media")
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-xmwm2 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   False 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  nas-storage:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  pvc-media
+    ReadOnly:   false
+  kube-api-access-xmwm2:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/arch=amd64
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason       Age                  From               Message
+  ----     ------       ----                 ----               -------
+  Normal   Scheduled    6m21s                default-scheduler  Successfully assigned default/jellyfin-db648fdd6-wtxtb to k8s-netbook
+  Warning  FailedMount  9s (x11 over 6m21s)  kubelet            MountVolume.SetUp failed for volume "pv-media-2tb" : mount failed: exit status 32
+Mounting command: mount
+Mounting arguments: -t nfs 192.168.68.114:/mnt/pve/media-drive /var/lib/kubelet/pods/1ff9c5d8-471c-44e1-8c76-456fe9095b53/volumes/kubernetes.io~nfs/pv-media-2tb
+Output: mount: /var/lib/kubelet/pods/1ff9c5d8-471c-44e1-8c76-456fe9095b53/volumes/kubernetes.io~nfs/pv-media-2tb: bad option; for several filesystems (e.g. nfs, cifs) you might need a /sbin/mount.<type> helper program.
+       dmesg(1) may have more information after failed mount system call.
+cachiadmin@k8s-control:~$ exit
+logout
+Connection to 192.168.68.101 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % ssh-copy-id cachiadmin@192.168.68.109                                                                                                            
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/Users/rovelazq/.ssh/id_ed25519.pub"
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+cachiadmin@192.168.68.109's password: 
+
+Number of key(s) added:        1
+
+Now try logging into the machine, with: "ssh 'cachiadmin@192.168.68.109'"
+and check to make sure that only the key(s) you wanted were added.
+
+rovelazq@ROVELAZQ-M-PPV9 ~ % clnb                                 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Wed Jul  8 08:34:49 PM UTC 2026
+
+  System load:  0.07               Temperature:             49.0 C
+  Usage of /:   29.7% of 26.99GB   Processes:               184
+  Memory usage: 15%                Users logged in:         1
+  Swap usage:   0%                 IPv4 address for wlp4s0: 192.168.68.109
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+28 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Wed Jul  8 20:21:08 2026 from 192.168.68.104
+cachiadmin@k8s-netbook:~$ sudo apt update
+[sudo] password for cachiadmin: 
+Hit:1 https://download.docker.com/linux/ubuntu noble InRelease
+Hit:3 http://archive.ubuntu.com/ubuntu noble InRelease                                                     
+Hit:4 http://security.ubuntu.com/ubuntu noble-security InRelease
+Hit:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:2 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.30/deb  InRelease
+Hit:6 http://archive.ubuntu.com/ubuntu noble-backports InRelease              
+Reading package lists... Done                                                 
+Building dependency tree... Done
+Reading state information... Done
+29 packages can be upgraded. Run 'apt list --upgradable' to see them.
+cachiadmin@k8s-netbook:~$ sudo apt install -y nfs-common
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  keyutils libnfsidmap1 rpcbind
+Suggested packages:
+  watchdog
+The following NEW packages will be installed:
+  keyutils libnfsidmap1 nfs-common rpcbind
+0 upgraded, 4 newly installed, 0 to remove and 29 not upgraded.
+Need to get 400 kB of archives.
+After this operation, 1416 kB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libnfsidmap1 amd64 1:2.6.4-3ubuntu5.1 [48.3 kB]
+Get:2 http://archive.ubuntu.com/ubuntu noble/main amd64 rpcbind amd64 1.2.6-7ubuntu2 [46.5 kB]
+Get:3 http://archive.ubuntu.com/ubuntu noble/main amd64 keyutils amd64 1.6.3-3build1 [56.8 kB]
+Get:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 nfs-common amd64 1:2.6.4-3ubuntu5.1 [248 kB]
+Fetched 400 kB in 2s (247 kB/s)    
+Selecting previously unselected package libnfsidmap1:amd64.
+(Reading database ... 88402 files and directories currently installed.)
+Preparing to unpack .../libnfsidmap1_1%3a2.6.4-3ubuntu5.1_amd64.deb ...
+Unpacking libnfsidmap1:amd64 (1:2.6.4-3ubuntu5.1) ...
+Selecting previously unselected package rpcbind.
+Preparing to unpack .../rpcbind_1.2.6-7ubuntu2_amd64.deb ...
+Unpacking rpcbind (1.2.6-7ubuntu2) ...
+Selecting previously unselected package keyutils.
+Preparing to unpack .../keyutils_1.6.3-3build1_amd64.deb ...
+Unpacking keyutils (1.6.3-3build1) ...
+Selecting previously unselected package nfs-common.
+Preparing to unpack .../nfs-common_1%3a2.6.4-3ubuntu5.1_amd64.deb ...
+Unpacking nfs-common (1:2.6.4-3ubuntu5.1) ...
+Setting up libnfsidmap1:amd64 (1:2.6.4-3ubuntu5.1) ...
+Setting up rpcbind (1.2.6-7ubuntu2) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/rpcbind.service → /usr/lib/systemd/system/rpcbind.service.
+Created symlink /etc/systemd/system/sockets.target.wants/rpcbind.socket → /usr/lib/systemd/system/rpcbind.socket.
+Setting up keyutils (1.6.3-3build1) ...
+Setting up nfs-common (1:2.6.4-3ubuntu5.1) ...
+
+Creating config file /etc/idmapd.conf with new version
+
+Creating config file /etc/nfs.conf with new version
+info: Selecting UID from range 100 to 999 ...
+
+info: Adding system user `statd' (UID 111) ...
+info: Adding new user `statd' (UID 111) with group `nogroup' ...
+info: Not creating home directory `/var/lib/nfs'.
+Created symlink /etc/systemd/system/multi-user.target.wants/nfs-client.target → /usr/lib/systemd/system/nfs-client.target.
+Created symlink /etc/systemd/system/remote-fs.target.wants/nfs-client.target → /usr/lib/systemd/system/nfs-client.target.
+auth-rpcgss-module.service is a disabled or a static unit, not starting it.
+nfs-idmapd.service is a disabled or a static unit, not starting it.
+nfs-utils.service is a disabled or a static unit, not starting it.
+proc-fs-nfsd.mount is a disabled or a static unit, not starting it.
+rpc-gssd.service is a disabled or a static unit, not starting it.
+rpc-statd-notify.service is a disabled or a static unit, not starting it.
+rpc-statd.service is a disabled or a static unit, not starting it.
+rpc-svcgssd.service is a disabled or a static unit, not starting it.
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.7) ...
+Scanning processes...                                                                                                                                                                                                                                                                      
+Scanning processor microcode...                                                                                                                                                                                                                                                            
+Scanning linux images...                                                                                                                                                                                                                                                                   
+
+Running kernel seems to be up-to-date.
+
+The processor microcode seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+cachiadmin@k8s-netbook:~$ exit
+logout
+Connection to 192.168.68.109 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl                               
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Wed Jul  8 08:36:18 PM UTC 2026
+
+  System load:  0.21               Processes:              209
+  Usage of /:   63.4% of 13.67GB   Users logged in:        0
+  Memory usage: 34%                IPv4 address for ens18: 192.168.68.101
+  Swap usage:   0%
+
+
+Expanded Security Maintenance for Applications is not enabled.
+
+28 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+Last login: Wed Jul  8 20:22:27 2026 from 192.168.68.104
+cachiadmin@k8s-control:~$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+jellyfin-6685498b77-4dq6l   0/1     Completed           0          23h
+jellyfin-6685498b77-jtqrk   0/1     Completed           0          24h
+jellyfin-db648fdd6-wtxtb    0/1     ContainerCreating   0          10m
+cachiadmin@k8s-control:~$ kubectl describe pod jellyfin-db648fdd6-wtxtb
+Name:             jellyfin-db648fdd6-wtxtb
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             k8s-netbook/192.168.68.109
+Start Time:       Wed, 08 Jul 2026 20:25:34 +0000
+Labels:           app=jellyfin
+                  pod-template-hash=db648fdd6
+Annotations:      cni.projectcalico.org/containerID: a1ead47047b3f470f43d6575d80107ba0b3394833ee7db2943de59a92b7bff5f
+                  cni.projectcalico.org/podIP: 192.168.129.130/32
+                  cni.projectcalico.org/podIPs: 192.168.129.130/32
+Status:           Pending
+IP:               
+IPs:              <none>
+Controlled By:    ReplicaSet/jellyfin-db648fdd6
+Containers:
+  jellyfin:
+    Container ID:   
+    Image:          jellyfin/jellyfin:latest
+    Image ID:       
+    Port:           8096/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       ContainerCreating
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /cache from nas-storage (rw,path="jellyfin-cache")
+      /config from nas-storage (rw,path="jellyfin-config")
+      /media from nas-storage (rw,path="jellyfin-media")
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-xmwm2 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   False 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  nas-storage:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  pvc-media
+    ReadOnly:   false
+  kube-api-access-xmwm2:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/arch=amd64
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason       Age                  From               Message
+  ----     ------       ----                 ----               -------
+  Normal   Scheduled    11m                  default-scheduler  Successfully assigned default/jellyfin-db648fdd6-wtxtb to k8s-netbook
+  Warning  FailedMount  3m8s (x12 over 11m)  kubelet            MountVolume.SetUp failed for volume "pv-media-2tb" : mount failed: exit status 32
+Mounting command: mount
+Mounting arguments: -t nfs 192.168.68.114:/mnt/pve/media-drive /var/lib/kubelet/pods/1ff9c5d8-471c-44e1-8c76-456fe9095b53/volumes/kubernetes.io~nfs/pv-media-2tb
+Output: mount: /var/lib/kubelet/pods/1ff9c5d8-471c-44e1-8c76-456fe9095b53/volumes/kubernetes.io~nfs/pv-media-2tb: bad option; for several filesystems (e.g. nfs, cifs) you might need a /sbin/mount.<type> helper program.
+       dmesg(1) may have more information after failed mount system call.
+  Normal  Pulling  64s  kubelet  Pulling image "jellyfin/jellyfin:latest"
+cachiadmin@k8s-control:~$ kubectl get pods
+NAME                        READY   STATUS              RESTARTS   AGE
+jellyfin-6685498b77-4dq6l   0/1     Completed           0          23h
+jellyfin-6685498b77-jtqrk   0/1     Completed           0          24h
+jellyfin-db648fdd6-wtxtb    0/1     ContainerCreating   0          11m
+cachiadmin@k8s-control:~$ kubectl delete pod jellyfin-db648fdd6-wtxtb 
+pod "jellyfin-db648fdd6-wtxtb" deleted
+cachiadmin@k8s-control:~$ kubectl get pods
+NAME                        READY   STATUS      RESTARTS   AGE
+jellyfin-6685498b77-4dq6l   0/1     Completed   0          23h
+jellyfin-6685498b77-jtqrk   0/1     Completed   0          24h
+jellyfin-db648fdd6-5s98h    1/1     Running     0          4s
+cachiadmin@k8s-control:~$ kubectl get pods -o wide
+NAME                        READY   STATUS      RESTARTS   AGE   IP               NODE          NOMINATED NODE   READINESS GATES
+jellyfin-6685498b77-4dq6l   0/1     Completed   0          23h   192.168.194.71   k8s-worker1   <none>           <none>
+jellyfin-6685498b77-jtqrk   0/1     Completed   0          24h   192.168.194.68   k8s-worker1   <none>           <none>
+jellyfin-db648fdd6-5s98h    1/1     Running     0          9s    192.168.126.11   k8s-worker2   <none>           <none>
+cachiadmin@k8s-control:~$ kubectl delete pod jellyfin-db648fdd6-5s98h
+pod "jellyfin-db648fdd6-5s98h" deleted
+cachiadmin@k8s-control:~$ kubectl get pods -o wide
+NAME                        READY   STATUS      RESTARTS   AGE   IP                NODE          NOMINATED NODE   READINESS GATES
+jellyfin-6685498b77-4dq6l   0/1     Completed   0          23h   192.168.194.71    k8s-worker1   <none>           <none>
+jellyfin-6685498b77-jtqrk   0/1     Completed   0          24h   192.168.194.68    k8s-worker1   <none>           <none>
+jellyfin-db648fdd6-crtlx    1/1     Running     0          5s    192.168.129.131   k8s-netbook   <none>           <none>
+cachiadmin@k8s-control:~$ kubectl describe pod jellyfin-db648fdd6-crtlx
+Name:             jellyfin-db648fdd6-crtlx
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             k8s-netbook/192.168.68.109
+Start Time:       Wed, 08 Jul 2026 20:39:02 +0000
+Labels:           app=jellyfin
+                  pod-template-hash=db648fdd6
+Annotations:      cni.projectcalico.org/containerID: bce3fa5ae944d6bcef260312c714aa66136dfafd8a506bb2971e529b6d8ac8db
+                  cni.projectcalico.org/podIP: 192.168.129.131/32
+                  cni.projectcalico.org/podIPs: 192.168.129.131/32
+Status:           Running
+IP:               192.168.129.131
+IPs:
+  IP:           192.168.129.131
+Controlled By:  ReplicaSet/jellyfin-db648fdd6
+Containers:
+  jellyfin:
+    Container ID:   containerd://fa4666c37f951cd6a1e28b44d05133567e199cb9c9372c03a1b9f8f3b87103ff
+    Image:          jellyfin/jellyfin:latest
+    Image ID:       docker.io/jellyfin/jellyfin@sha256:aefb67e6a7ff1debdd154a78a7bbb780fd0c873d8639210a7f6a2016ad2b35db
+    Port:           8096/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Wed, 08 Jul 2026 20:39:04 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /cache from nas-storage (rw,path="jellyfin-cache")
+      /config from nas-storage (rw,path="jellyfin-config")
+      /media from nas-storage (rw,path="jellyfin-media")
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-g54ph (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  nas-storage:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  pvc-media
+    ReadOnly:   false
+  kube-api-access-g54ph:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              kubernetes.io/arch=amd64
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  34s   default-scheduler  Successfully assigned default/jellyfin-db648fdd6-crtlx to k8s-netbook
+  Normal  Pulling    33s   kubelet            Pulling image "jellyfin/jellyfin:latest"
+  Normal  Pulled     32s   kubelet            Successfully pulled image "jellyfin/jellyfin:latest" in 647ms (647ms including waiting). Image size: 689743046 bytes.
+  Normal  Created    32s   kubelet            Created container: jellyfin
+  Normal  Started    32s   kubelet            Started container jellyfin
+cachiadmin@k8s-control:~$ kubectl get nodes
+NAME          STATUS   ROLES           AGE     VERSION
+k8s-control   Ready    control-plane   5d      v1.30.14
+k8s-netbook   Ready    <none>          23m     v1.30.14
+k8s-worker1   Ready    <none>          4d23h   v1.30.14
+k8s-worker2   Ready    <none>          4d23h   v1.30.14
+cachiadmin@k8s-control:~$ kubectl taint nodes k8s-netbook hardware=lowresource:NoSchedule
+node/k8s-netbook tainted
+cachiadmin@k8s-control:~$ kubectl delete pod -l app=jellyfin
+pod "jellyfin-6685498b77-4dq6l" deleted
+pod "jellyfin-6685498b77-jtqrk" deleted
+pod "jellyfin-db648fdd6-crtlx" deleted
+cachiadmin@k8s-control:~$ kubectl get pods -o wide
+NAME                       READY   STATUS    RESTARTS   AGE   IP               NODE          NOMINATED NODE   READINESS GATES
+jellyfin-db648fdd6-5vmp8   1/1     Running   0          17s   192.168.126.12   k8s-worker2   <none>           <none>
+cachiadmin@k8s-control:~$ kubectl get nodes -o wide
+NAME          STATUS   ROLES           AGE     VERSION    INTERNAL-IP      EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+k8s-control   Ready    control-plane   5d      v1.30.14   192.168.68.101   <none>        Ubuntu 24.04.4 LTS   6.8.0-134-generic   containerd://2.2.5
+k8s-netbook   Ready    <none>          25m     v1.30.14   192.168.68.109   <none>        Ubuntu 24.04.4 LTS   6.8.0-134-generic   containerd://2.2.5
+k8s-worker1   Ready    <none>          4d23h   v1.30.14   192.168.68.113   <none>        Ubuntu 24.04.4 LTS   6.8.0-134-generic   containerd://2.2.5
+k8s-worker2   Ready    <none>          4d23h   v1.30.14   192.168.68.115   <none>        Ubuntu 24.04.4 LTS   6.8.0-134-generic   containerd://2.2.5
+cachiadmin@k8s-control:~$ 
