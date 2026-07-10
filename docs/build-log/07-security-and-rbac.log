@@ -1,0 +1,169 @@
+Last login: Fri Jul 10 11:09:37 on ttys000
+rovelazq@ROVELAZQ-M-PPV9 ~ % clsrv 
+Linux pve 7.0.2-6-pve #1 SMP PREEMPT_DYNAMIC PMX 7.0.2-6 (2026-05-20T08:55Z) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Tue Jul  7 21:43:00 2026 from 192.168.68.109
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+root@pve:~# nvidia-smi
+-bash: nvidia-smi: command not found
+root@pve:~# intel_gpu_top
+-bash: intel_gpu_top: command not found
+root@pve:~# lspci | grep -i vga 
+02:00.0 VGA compatible controller: NVIDIA Corporation GK107GL [Quadro K2000] (rev a1)
+root@pve:~# lspci | grep -i nvidia
+02:00.0 VGA compatible controller: NVIDIA Corporation GK107GL [Quadro K2000] (rev a1)
+02:00.1 Audio device: NVIDIA Corporation GK107 HDMI Audio Controller (rev a1)
+root@pve:~# Read from remote host 192.168.68.114: Can't assign requested address
+Connection to 192.168.68.114 closed.
+client_loop: send disconnect: Broken pipe
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Jul 10 10:21:27 PM UTC 2026
+
+  System load:  0.29               Processes:              206
+  Usage of /:   65.1% of 13.67GB   Users logged in:        0
+  Memory usage: 33%                IPv4 address for ens18: 192.168.68.101
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+31 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+1 additional security update can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+Last login: Fri Jul 10 17:09:51 2026 from 192.168.68.100
+cachiadmin@k8s-control:~$ mkdir -p ~/manifests/security
+cachiadmin@k8s-control:~$ cd ~/manifests/security
+cachiadmin@k8s-control:~/manifests/security$ openssl genrsa -out alex.key 2048
+cachiadmin@k8s-control:~/manifests/security$ openssl req -new -key alex.key -alex.csr -subj "/CN=alex"
+req: Unknown option or message digest: alex.csr
+req: Use -help for summary.
+cachiadmin@k8s-control:~/manifests/security$ openssl req -new -key alex.key -out alex.csr -subj "/CN=alex"
+cachiadmin@k8s-control:~/manifests/security$ cat alex.csr | base64 | tr -d '\n'
+LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ1ZEQ0NBVHdDQVFBd0R6RU5NQXNHQTFVRUF3d0VZV3hsZURDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRApnZ0VQQURDQ0FRb0NnZ0VCQUl3RDE2UXkrRFdOQlM0c1BNY0xZT296SzJrQ3phRjRQT3lta04yNUd5VzI3dzFxCnB5cGphd0kzZTM0YzlrUFdYVVJtSFdVdmRpV09MRGl3RExVWlc1cit5TnlXMTQrYnlFUnJNMmE4RGtybllTT1QKWFMyUVlYU1Q2WnNMRmtTY0RDTEliQ2xIRWpuSzhvK2JHVGs5ZTlOUUZBMWJTVDNIMnRiYlBmSzY2RlFhbS92eApqVjF4QzJMY1JDcG5GREpjdGZodUZKQW5HMDN0VjB4ckYyT2tsWXhsYVVkKzNJcWZYbjdOYmpoQjJQT3U3N2Q5CmJ3MG1JaHcwMk5JaGFMQTFNZFBLL3EyQWVydDVzY1Rka0djNUlhSGIxK2FXT0RuU1FJV29SU2tPeUhWZ2ZVR3cKQUI1QzFkUFlPNlpvc0NNODNPWDZNS0M0RFpDaWhWaUIwM04vM09FQ0F3RUFBYUFBTUEwR0NTcUdTSWIzRFFFQgpDd1VBQTRJQkFRQXRNd3FjcjBJY3cveTQ2d21XRlJ2eUNoMG5sdlU1QndkYlplL3NxaGluM1lMS0loQnBzbWlUCk9CamFtS1RjY01RdXJ0NzRUdWNkVUdSMDhRNTJmNHR1TDFWU0lBSGdJUENLc2Q4T01CL05ZeXl6dEs3TnZ3QXgKWVZTUVhSa1RhMjErdE1wejRqMVo1Qmw5dVdUVG9jWVhLSEs5VE9OTzdHY0thOGpmY1gyMW5wdGdvcVZPbmlaSApRNkpRdnY5R3pTTTVzbzd1WSthSnVIVHd6RERIOTBJZm1wVDNHc3lha1VXTjlyWXpBK1QrRVZRUVZhWDVuQXZPCnlPZmVkUXZUVnBkN0EvT1FRa1BjNzRyN3g5bU1BYVI4c1BGZWkrYkVuSEVEcmRCNXpRMkFQQ0xrTU44N25SR1QKRW9jK3NFdjFIdzErT0JRYjBnTWtGSkFCWFl0V3g1UjQKLS0tLS1FTkQgQ0VSVElGSUNBVEUgUkVRVUVTVC0tLS0tCg==cachiadmin@k8s-control:~/manifests/security$ 
+cachiadmin@k8s-control:~/manifests/security$ vi alex-csr.yaml
+cachiadmin@k8s-control:~/manifests/security$ kubectl apply -f alex-csr.yaml 
+certificatesigningrequest.certificates.k8s.io/alex-csr created
+cachiadmin@k8s-control:~/manifests/security$ kubectl get csr
+NAME       AGE   SIGNERNAME                            REQUESTOR          REQUESTEDDURATION   CONDITION
+alex-csr   39s   kubernetes.io/kube-apiserver-client   kubernetes-admin   24h                 Pending
+cachiadmin@k8s-control:~/manifests/security$ kubectl certificate approve alex-csr
+certificatesigningrequest.certificates.k8s.io/alex-csr approved
+cachiadmin@k8s-control:~/manifests/security$ kubectl get csr
+NAME       AGE   SIGNERNAME                            REQUESTOR          REQUESTEDDURATION   CONDITION
+alex-csr   73s   kubernetes.io/kube-apiserver-client   kubernetes-admin   24h                 Approved,Issued
+cachiadmin@k8s-control:~/manifests/security$ kubectl get csr alex-csr
+NAME       AGE    SIGNERNAME                            REQUESTOR          REQUESTEDDURATION   CONDITION
+alex-csr   117s   kubernetes.io/kube-apiserver-client   kubernetes-admin   24h                 Approved,Issued
+cachiadmin@k8s-control:~/manifests/security$ kubectl get csr alex-csr -o json
+{
+    "apiVersion": "certificates.k8s.io/v1",
+    "kind": "CertificateSigningRequest",
+    "metadata": {
+        "annotations": {
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"certificates.k8s.io/v1\",\"kind\":\"CertificateSigningRequest\",\"metadata\":{\"annotations\":{},\"name\":\"alex-csr\"},\"spec\":{\"expirationSeconds\":86400,\"request\":\"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ1ZEQ0NBVHdDQVFBd0R6RU5NQXNHQTFVRUF3d0VZV3hsZURDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRApnZ0VQQURDQ0FRb0NnZ0VCQUl3RDE2UXkrRFdOQlM0c1BNY0xZT296SzJrQ3phRjRQT3lta04yNUd5VzI3dzFxCnB5cGphd0kzZTM0YzlrUFdYVVJtSFdVdmRpV09MRGl3RExVWlc1cit5TnlXMTQrYnlFUnJNMmE4RGtybllTT1QKWFMyUVlYU1Q2WnNMRmtTY0RDTEliQ2xIRWpuSzhvK2JHVGs5ZTlOUUZBMWJTVDNIMnRiYlBmSzY2RlFhbS92eApqVjF4QzJMY1JDcG5GREpjdGZodUZKQW5HMDN0VjB4ckYyT2tsWXhsYVVkKzNJcWZYbjdOYmpoQjJQT3U3N2Q5CmJ3MG1JaHcwMk5JaGFMQTFNZFBLL3EyQWVydDVzY1Rka0djNUlhSGIxK2FXT0RuU1FJV29SU2tPeUhWZ2ZVR3cKQUI1QzFkUFlPNlpvc0NNODNPWDZNS0M0RFpDaWhWaUIwM04vM09FQ0F3RUFBYUFBTUEwR0NTcUdTSWIzRFFFQgpDd1VBQTRJQkFRQXRNd3FjcjBJY3cveTQ2d21XRlJ2eUNoMG5sdlU1QndkYlplL3NxaGluM1lMS0loQnBzbWlUCk9CamFtS1RjY01RdXJ0NzRUdWNkVUdSMDhRNTJmNHR1TDFWU0lBSGdJUENLc2Q4T01CL05ZeXl6dEs3TnZ3QXgKWVZTUVhSa1RhMjErdE1wejRqMVo1Qmw5dVdUVG9jWVhLSEs5VE9OTzdHY0thOGpmY1gyMW5wdGdvcVZPbmlaSApRNkpRdnY5R3pTTTVzbzd1WSthSnVIVHd6RERIOTBJZm1wVDNHc3lha1VXTjlyWXpBK1QrRVZRUVZhWDVuQXZPCnlPZmVkUXZUVnBkN0EvT1FRa1BjNzRyN3g5bU1BYVI4c1BGZWkrYkVuSEVEcmRCNXpRMkFQQ0xrTU44N25SR1QKRW9jK3NFdjFIdzErT0JRYjBnTWtGSkFCWFl0V3g1UjQKLS0tLS1FTkQgQ0VSVElGSUNBVEUgUkVRVUVTVC0tLS0tCg==\",\"signerName\":\"kubernetes.io/kube-apiserver-client\",\"usages\":[\"client auth\"]}}\n"
+        },
+        "creationTimestamp": "2026-07-10T22:33:10Z",
+        "name": "alex-csr",
+        "resourceVersion": "1231847",
+        "uid": "00c6d51e-ce81-4fd1-bb7d-fb3b89009a63"
+    },
+    "spec": {
+        "expirationSeconds": 86400,
+        "groups": [
+            "kubeadm:cluster-admins",
+            "system:authenticated"
+        ],
+        "request": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ1ZEQ0NBVHdDQVFBd0R6RU5NQXNHQTFVRUF3d0VZV3hsZURDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRApnZ0VQQURDQ0FRb0NnZ0VCQUl3RDE2UXkrRFdOQlM0c1BNY0xZT296SzJrQ3phRjRQT3lta04yNUd5VzI3dzFxCnB5cGphd0kzZTM0YzlrUFdYVVJtSFdVdmRpV09MRGl3RExVWlc1cit5TnlXMTQrYnlFUnJNMmE4RGtybllTT1QKWFMyUVlYU1Q2WnNMRmtTY0RDTEliQ2xIRWpuSzhvK2JHVGs5ZTlOUUZBMWJTVDNIMnRiYlBmSzY2RlFhbS92eApqVjF4QzJMY1JDcG5GREpjdGZodUZKQW5HMDN0VjB4ckYyT2tsWXhsYVVkKzNJcWZYbjdOYmpoQjJQT3U3N2Q5CmJ3MG1JaHcwMk5JaGFMQTFNZFBLL3EyQWVydDVzY1Rka0djNUlhSGIxK2FXT0RuU1FJV29SU2tPeUhWZ2ZVR3cKQUI1QzFkUFlPNlpvc0NNODNPWDZNS0M0RFpDaWhWaUIwM04vM09FQ0F3RUFBYUFBTUEwR0NTcUdTSWIzRFFFQgpDd1VBQTRJQkFRQXRNd3FjcjBJY3cveTQ2d21XRlJ2eUNoMG5sdlU1QndkYlplL3NxaGluM1lMS0loQnBzbWlUCk9CamFtS1RjY01RdXJ0NzRUdWNkVUdSMDhRNTJmNHR1TDFWU0lBSGdJUENLc2Q4T01CL05ZeXl6dEs3TnZ3QXgKWVZTUVhSa1RhMjErdE1wejRqMVo1Qmw5dVdUVG9jWVhLSEs5VE9OTzdHY0thOGpmY1gyMW5wdGdvcVZPbmlaSApRNkpRdnY5R3pTTTVzbzd1WSthSnVIVHd6RERIOTBJZm1wVDNHc3lha1VXTjlyWXpBK1QrRVZRUVZhWDVuQXZPCnlPZmVkUXZUVnBkN0EvT1FRa1BjNzRyN3g5bU1BYVI4c1BGZWkrYkVuSEVEcmRCNXpRMkFQQ0xrTU44N25SR1QKRW9jK3NFdjFIdzErT0JRYjBnTWtGSkFCWFl0V3g1UjQKLS0tLS1FTkQgQ0VSVElGSUNBVEUgUkVRVUVTVC0tLS0tCg==",
+        "signerName": "kubernetes.io/kube-apiserver-client",
+        "usages": [
+            "client auth"
+        ],
+        "username": "kubernetes-admin"
+    },
+    "status": {
+        "certificate": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5VENDQWQyZ0F3SUJBZ0lSQUwzMEY1Yi8vYlE5OFY5UnMzSDk5c0l3RFFZSktvWklodmNOQVFFTEJRQXcKRlRFVE1CRUdBMVVFQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TmpBM01UQXlNakk1TVRsYUZ3MHlOakEzTVRFeQpNakk1TVRsYU1BOHhEVEFMQmdOVkJBTVRCR0ZzWlhnd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3CmdnRUtBb0lCQVFDTUE5ZWtNdmcxalFVdUxEekhDMkRxTXl0cEFzMmhlRHpzcHBEZHVSc2x0dThOYXFjcVkyc0MKTjN0K0hQWkQxbDFFWmgxbEwzWWxqaXc0c0F5MUdWdWEvc2pjbHRlUG04aEVhek5tdkE1SzUyRWprMTB0a0dGMAprK21iQ3haRW5Bd2l5R3dwUnhJNXl2S1BteGs1UFh2VFVCUU5XMGs5eDlyVzJ6M3l1dWhVR3B2NzhZMWRjUXRpCjNFUXFaeFF5WExYNGJoU1FKeHRON1ZkTWF4ZGpwSldNWldsSGZ0eUtuMTUrelc0NFFkanpydSszZlc4TkppSWMKTk5qU0lXaXdOVEhUeXY2dGdIcTdlYkhFM1pCbk9TR2gyOWZtbGpnNTBrQ0ZxRVVwRHNoMVlIMUJzQUFlUXRYVAoyRHVtYUxBalBOemwrakNndUEyUW9vVllnZE56Zjl6aEFnTUJBQUdqUmpCRU1CTUdBMVVkSlFRTU1Bb0dDQ3NHCkFRVUZCd01DTUF3R0ExVWRFd0VCL3dRQ01BQXdId1lEVlIwakJCZ3dGb0FVRkFtY3Exb1g2VUg0SnFNcjQwU2IKOXMvNlgrVXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBSGRNZnhWMFdGNFRiNDRnaUdBQUNCS3NDTXlzaXNrdwpvc0VJRWZsa0ptQURaQzVYWHpKL25obXVNY3BPS3dsOWNMcUR6OE5jcGh0RjFLTnh6cFJISiswNDV5OWQ5bmovClVILzFweWVMaU40S1pIYlB4R0hINnoyaU5kVTE3Q05hRG0yRTJPVjFNbHNhOFVjQmNndnE1NnRoSVRQMklOeU8KK1Q4RjFCZmtMaDJqRXF3WUFrQkFHUUhDZ09NTGVnZFVpSk9INEZ5OFVRL1FmQjhPNERkTHNNVnRONzJaN1lCZQowNngrWVZ0UUdNOTZFQWVnQUFmdUhhNkd5Y3lES3dKNnJ6RDlaQWVONE1aQ0hWZkczNzd3SlBCSUxmeVN1OVc1ClIvQmR3bUNZekdVT2JEckd3NGJQV3Nvc204b2krWFVvRjRBb1o3U2VCQ3FJVHlsN09KUzNBTnM9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K",
+        "conditions": [
+            {
+                "lastTransitionTime": "2026-07-10T22:34:19Z",
+                "lastUpdateTime": "2026-07-10T22:34:19Z",
+                "message": "This CSR was approved by kubectl certificate approve.",
+                "reason": "KubectlApprove",
+                "status": "True",
+                "type": "Approved"
+            }
+        ]
+    }
+}
+cachiadmin@k8s-control:~/manifests/security$ ls -lhrt
+total 12K
+-rw------- 1 cachiadmin cachiadmin 1.7K Jul 10 22:24 alex.key
+-rw-rw-r-- 1 cachiadmin cachiadmin  883 Jul 10 22:26 alex.csr
+-rw-rw-r-- 1 cachiadmin cachiadmin 1.4K Jul 10 22:32 alex-csr.yaml
+cachiadmin@k8s-control:~/manifests/security$ kubectl get csr alex-csr -o jsonpath='{.status.certificate}' | base64 --decode > alex.crt
+cachiadmin@k8s-control:~/manifests/security$ cat alex.crt
+-----BEGIN CERTIFICATE-----
+MIIC9TCCAd2gAwIBAgIRAL30F5b//bQ98V9Rs3H99sIwDQYJKoZIhvcNAQELBQAw
+FTETMBEGA1UEAxMKa3ViZXJuZXRlczAeFw0yNjA3MTAyMjI5MTlaFw0yNjA3MTEy
+MjI5MTlaMA8xDTALBgNVBAMTBGFsZXgwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
+ggEKAoIBAQCMA9ekMvg1jQUuLDzHC2DqMytpAs2heDzsppDduRsltu8NaqcqY2sC
+N3t+HPZD1l1EZh1lL3Yljiw4sAy1GVua/sjcltePm8hEazNmvA5K52Ejk10tkGF0
+k+mbCxZEnAwiyGwpRxI5yvKPmxk5PXvTUBQNW0k9x9rW2z3yuuhUGpv78Y1dcQti
+3EQqZxQyXLX4bhSQJxtN7VdMaxdjpJWMZWlHftyKn15+zW44Qdjzru+3fW8NJiIc
+NNjSIWiwNTHTyv6tgHq7ebHE3ZBnOSGh29fmljg50kCFqEUpDsh1YH1BsAAeQtXT
+2DumaLAjPNzl+jCguA2QooVYgdNzf9zhAgMBAAGjRjBEMBMGA1UdJQQMMAoGCCsG
+AQUFBwMCMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUFAmcq1oX6UH4JqMr40Sb
+9s/6X+UwDQYJKoZIhvcNAQELBQADggEBAHdMfxV0WF4Tb44giGAACBKsCMysiskw
+osEIEflkJmADZC5XXzJ/nhmuMcpOKwl9cLqDz8NcphtF1KNxzpRHJ+045y9d9nj/
+UH/1pyeLiN4KZHbPxGHH6z2iNdU17CNaDm2E2OV1Mlsa8UcBcgvq56thITP2INyO
++T8F1BfkLh2jEqwYAkBAGQHCgOMLegdUiJOH4Fy8UQ/QfB8O4DdLsMVtN72Z7YBe
+06x+YVtQGM96EAegAAfuHa6GycyDKwJ6rzD9ZAeN4MZCHVfG377wJPBILfySu9W5
+R/BdwmCYzGUObDrGw4bPWsosm8oi+XUoF4AoZ7SeBCqITyl7OJS3ANs=
+-----END CERTIFICATE-----
+cachiadmin@k8s-control:~/manifests/security$ vi pod-reader-role.yaml
+cachiadmin@k8s-control:~/manifests/security$ kubectl apply -f pod-reader-role.yaml
+role.rbac.authorization.k8s.io/pod-reader created
+cachiadmin@k8s-control:~/manifests/security$ vi alex-rolebinding.yaml
+cachiadmin@k8s-control:~/manifests/security$ kubectl auth can-i list pods --as=alex
+no
+cachiadmin@k8s-control:~/manifests/security$ kubectl apply -f alex-rolebinding.yaml 
+Error from server (BadRequest): error when creating "alex-rolebinding.yaml": RoleBinding in version "v1" cannot be handled as a RoleBinding: json: cannot unmarshal array into Go struct field RoleBinding.roleRef of type v1.RoleRef
+cachiadmin@k8s-control:~/manifests/security$ vi alex-rolebinding.yaml
+cachiadmin@k8s-control:~/manifests/security$ vi alex-rolebinding.yaml
+cachiadmin@k8s-control:~/manifests/security$ vi pod-reader-role.yaml
+cachiadmin@k8s-control:~/manifests/security$ kubectl apply -f pod-reader-role.yaml
+role.rbac.authorization.k8s.io/pod-reader unchanged
+cachiadmin@k8s-control:~/manifests/security$ kubectl apply -f alex-rolebinding.yaml
+Error from server (BadRequest): error when creating "alex-rolebinding.yaml": RoleBinding in version "v1" cannot be handled as a RoleBinding: json: cannot unmarshal array into Go struct field RoleBinding.roleRef of type v1.RoleRef
+cachiadmin@k8s-control:~/manifests/security$ vi alex-rolebinding.yaml
+cachiadmin@k8s-control:~/manifests/security$ kubectl apply -f alex-rolebinding.yaml
+rolebinding.rbac.authorization.k8s.io/read-pods-alex created
+cachiadmin@k8s-control:~/manifests/security$ kubectl can-i list pods --as=alex
+error: unknown command "can-i" for "kubectl"
+cachiadmin@k8s-control:~/manifests/security$ kubectl auth can-i list pods --as=alex
+yes
+cachiadmin@k8s-control:~/manifests/security$ kubectl auth can-i create pods --as=alex
+no
+cachiadmin@k8s-control:~/manifests/security$ L

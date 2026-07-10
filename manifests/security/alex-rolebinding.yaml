@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods-alex
+  namespace: default
+subjects:
+- kind: User
+  name: alex # Matches the CN in the certificate
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader # Matches the Role name
+  apiGroup: rbac.authorization.k8s.io
