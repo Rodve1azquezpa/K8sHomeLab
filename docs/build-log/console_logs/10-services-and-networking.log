@@ -1,0 +1,322 @@
+Last login: Thu Jul 16 13:30:21 on ttys001
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Thu Jul 16 08:44:17 PM UTC 2026
+
+  System load:  0.57               Processes:              194
+  Usage of /:   76.5% of 13.67GB   Users logged in:        0
+  Memory usage: 31%                IPv4 address for ens18: 192.168.68.101
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+41 updates can be applied immediately.
+1 of these updates is a standard security update.
+To see these additional updates run: apt list --upgradable
+
+1 additional security update can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+Last login: Wed Jul 15 21:27:28 2026 from 192.168.68.110
+cachiadmin@k8s-control:~$ ip -4 addre show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2: ens18: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    altname enp0s18
+    inet 192.168.68.101/24 metric 100 brd 192.168.68.255 scope global dynamic ens18
+       valid_lft 4451sec preferred_lft 4451sec
+9: vxlan.calico: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 192.168.175.0/32 scope global vxlan.calico
+       valid_lft forever preferred_lft forever
+cachiadmin@k8s-control:~$ kubectl get ns
+NAME               STATUS   AGE
+calico-apiserver   Active   12d
+calico-system      Active   12d
+default            Active   13d
+kube-node-lease    Active   13d
+kube-public        Active   13d
+kube-system        Active   13d
+metallb-system     Active   9d
+tigera-operator    Active   12d
+cachiadmin@k8s-control:~$ kubectl get pods -n metallbsystem
+No resources found in metallbsystem namespace.
+cachiadmin@k8s-control:~$ kubectl get pods -n metal-lbsystem
+No resources found in metal-lbsystem namespace.
+cachiadmin@k8s-control:~$ kubectl get pods -n metallb-system
+NAME                          READY   STATUS                   RESTARTS      AGE
+controller-86f5578878-4g676   0/1     ContainerStatusUnknown   0             2d
+controller-86f5578878-g8q25   1/1     Running                  0             23h
+speaker-54kkw                 1/1     Running                  39 (2d ago)   8d
+speaker-ddvht                 1/1     Running                  1             8d
+speaker-pdtlb                 1/1     Running                  33 (2d ago)   9d
+speaker-qlbdh                 1/1     Running                  0             23h
+cachiadmin@k8s-control:~$ kubectl delete ns metallb-system
+namespace "metallb-system" deleted
+cachiadmin@k8s-control:~$ kubectl delete ns metallb-system
+Error from server (NotFound): namespaces "metallb-system" not found
+cachiadmin@k8s-control:~$ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.8/config/manifests/metallb-native.yaml
+namespace/metallb-system created
+customresourcedefinition.apiextensions.k8s.io/bfdprofiles.metallb.io unchanged
+customresourcedefinition.apiextensions.k8s.io/bgpadvertisements.metallb.io configured
+customresourcedefinition.apiextensions.k8s.io/bgppeers.metallb.io configured
+customresourcedefinition.apiextensions.k8s.io/communities.metallb.io unchanged
+customresourcedefinition.apiextensions.k8s.io/ipaddresspools.metallb.io configured
+customresourcedefinition.apiextensions.k8s.io/l2advertisements.metallb.io configured
+customresourcedefinition.apiextensions.k8s.io/servicel2statuses.metallb.io configured
+serviceaccount/controller created
+serviceaccount/speaker created
+role.rbac.authorization.k8s.io/controller created
+role.rbac.authorization.k8s.io/pod-lister created
+clusterrole.rbac.authorization.k8s.io/metallb-system:controller unchanged
+clusterrole.rbac.authorization.k8s.io/metallb-system:speaker unchanged
+rolebinding.rbac.authorization.k8s.io/controller created
+rolebinding.rbac.authorization.k8s.io/pod-lister created
+clusterrolebinding.rbac.authorization.k8s.io/metallb-system:controller unchanged
+clusterrolebinding.rbac.authorization.k8s.io/metallb-system:speaker unchanged
+configmap/metallb-excludel2 created
+secret/metallb-webhook-cert created
+service/metallb-webhook-service created
+deployment.apps/controller created
+daemonset.apps/speaker created
+validatingwebhookconfiguration.admissionregistration.k8s.io/metallb-webhook-configuration configured
+cachiadmin@k8s-control:~$ kubectl get pods -n metallb-system -w
+NAME                          READY   STATUS              RESTARTS   AGE
+controller-8694df9d9b-t5xdj   0/1     Running             0          20s
+speaker-28s5d                 0/1     ContainerCreating   0          20s
+speaker-djms5                 0/1     Running             0          20s
+speaker-s6257                 0/1     ContainerCreating   0          20s
+controller-8694df9d9b-t5xdj   1/1     Running             0          21s
+speaker-28s5d                 0/1     Running             0          24s
+speaker-s6257                 0/1     Running             0          25s
+speaker-djms5                 1/1     Running             0          30s
+speaker-28s5d                 1/1     Running             0          36s
+speaker-s6257                 1/1     Running             0          37s
+^Ccachiadmin@k8s-control:~$ kubectl get pods -n metallb-system -w
+NAME                          READY   STATUS    RESTARTS   AGE
+controller-8694df9d9b-t5xdj   1/1     Running   0          99s
+speaker-28s5d                 1/1     Running   0          99s
+speaker-djms5                 1/1     Running   0          99s
+speaker-s6257                 1/1     Running   0          99s
+^Ccachiadmin@k8s-control:~$ cat <
+-bash: syntax error near unexpected token `newline'
+cachiadmin@k8s-control:~$ cat <<EOF | kubectl apply -f -
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: primary-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.68.240-192.168.68.250
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: primary-l2-advert
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - primary-pool
+EOF
+ipaddresspool.metallb.io/primary-pool created
+l2advertisement.metallb.io/primary-l2-advert created
+cachiadmin@k8s-control:~$ kubectl create deployment test-nginx --image=nginx:alpine
+deployment.apps/test-nginx created
+cachiadmin@k8s-control:~$ kubectl expose deployment test-nginx --port=80 --type=LoadBalancer
+service/test-nginx exposed
+cachiadmin@k8s-control:~$ kubectl get svc test-nginx
+NAME         TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)        AGE
+test-nginx   LoadBalancer   10.101.24.58   192.168.68.241   80:31655/TCP   32s
+cachiadmin@k8s-control:~$ kubectl get svc 
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)          AGE
+jellyfin-svc   LoadBalancer   10.106.199.249   192.168.68.240   8096:32121/TCP   9d
+kubernetes     ClusterIP      10.96.0.1        <none>           443/TCP          13d
+test-nginx     LoadBalancer   10.101.24.58     192.168.68.241   80:31655/TCP     99s
+cachiadmin@k8s-control:~$ cat <<EOF | kubectl apply -f -
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: primary-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.68.200-192.168.68.250
+EOF
+ipaddresspool.metallb.io/primary-pool configured
+cachiadmin@k8s-control:~$ kubectl delete deployment test-nginx
+deployment.apps "test-nginx" deleted
+cachiadmin@k8s-control:~$ kubectl delete svc test-nginx
+service "test-nginx" deleted
+cachiadmin@k8s-control:~$ kubectl get svc
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)          AGE
+jellyfin-svc   LoadBalancer   10.106.199.249   192.168.68.240   8096:32121/TCP   9d
+kubernetes     ClusterIP      10.96.0.1        <none>           443/TCP          13d
+cachiadmin@k8s-control:~$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.11.1/deploy/static/provider/cloud/deploy.yaml
+namespace/ingress-nginx created
+serviceaccount/ingress-nginx created
+serviceaccount/ingress-nginx-admission created
+role.rbac.authorization.k8s.io/ingress-nginx created
+role.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx-admission created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+configmap/ingress-nginx-controller created
+service/ingress-nginx-controller created
+service/ingress-nginx-controller-admission created
+deployment.apps/ingress-nginx-controller created
+job.batch/ingress-nginx-admission-create created
+job.batch/ingress-nginx-admission-patch created
+ingressclass.networking.k8s.io/nginx created
+validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission created
+cachiadmin@k8s-control:~$ kubectl get pods -n ingress-nginx
+NAME                                       READY   STATUS      RESTARTS   AGE
+ingress-nginx-admission-create-bdcbd       0/1     Completed   0          49s
+ingress-nginx-admission-patch-h89kx        0/1     Completed   3          49s
+ingress-nginx-controller-f6dcd6c56-wsclk   0/1     Running     0          49s
+cachiadmin@k8s-control:~$ kubectl get pods -n ingress-nginx
+NAME                                       READY   STATUS      RESTARTS   AGE
+ingress-nginx-admission-create-bdcbd       0/1     Completed   0          65s
+ingress-nginx-admission-patch-h89kx        0/1     Completed   3          65s
+ingress-nginx-controller-f6dcd6c56-wsclk   1/1     Running     0          65s
+cachiadmin@k8s-control:~$ kubectl get pods -n ingress-nginx
+NAME                                       READY   STATUS      RESTARTS   AGE
+ingress-nginx-admission-create-bdcbd       0/1     Completed   0          73s
+ingress-nginx-admission-patch-h89kx        0/1     Completed   3          73s
+ingress-nginx-controller-f6dcd6c56-wsclk   1/1     Running     0          73s
+cachiadmin@k8s-control:~$ kubectl get svc
+NAME           TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)          AGE
+jellyfin-svc   LoadBalancer   10.106.199.249   192.168.68.240   8096:32121/TCP   9d
+kubernetes     ClusterIP      10.96.0.1        <none>           443/TCP          13d
+cachiadmin@k8s-control:~$ 
+cachiadmin@k8s-control:~$ kubectl get svc -A
+NAMESPACE          NAME                                 TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)                      AGE
+calico-apiserver   calico-api                           ClusterIP      10.105.141.72    <none>           443/TCP                      13d
+calico-system      calico-kube-controllers-metrics      ClusterIP      None             <none>           9094/TCP                     13d
+calico-system      calico-typha                         ClusterIP      10.99.150.25     <none>           5473/TCP                     13d
+default            jellyfin-svc                         LoadBalancer   10.106.199.249   192.168.68.240   8096:32121/TCP               9d
+default            kubernetes                           ClusterIP      10.96.0.1        <none>           443/TCP                      13d
+ingress-nginx      ingress-nginx-controller             LoadBalancer   10.98.141.94     192.168.68.200   80:31504/TCP,443:30576/TCP   116s
+ingress-nginx      ingress-nginx-controller-admission   ClusterIP      10.103.35.153    <none>           443/TCP                      116s
+kube-system        kube-dns                             ClusterIP      10.96.0.10       <none>           53/UDP,53/TCP,9153/TCP       13d
+metallb-system     metallb-webhook-service              ClusterIP      10.100.196.105   <none>           443/TCP                      19m
+cachiadmin@k8s-control:~$ kubectl get svc -n ingress-nginx 
+NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)                      AGE
+ingress-nginx-controller             LoadBalancer   10.98.141.94    192.168.68.200   80:31504/TCP,443:30576/TCP   2m53s
+ingress-nginx-controller-admission   ClusterIP      10.103.35.153   <none>           443/TCP                      2m53s
+cachiadmin@k8s-control:~$ kubectl create deployment app1 --image=nginx:alpine
+deployment.apps/app1 created
+cachiadmin@k8s-control:~$ kubectl expose deployment app1 --port:80 --name=app1-svc
+error: unknown flag: --port:80
+See 'kubectl expose --help' for usage.
+cachiadmin@k8s-control:~$ kubectl expose deployment app1 --port=80 --name=app1-svc
+service/app1-svc exposed
+cachiadmin@k8s-control:~$ kubectl create deployment app2 --image=httpd:alpine
+deployment.apps/app2 created
+cachiadmin@k8s-control:~$ kubectl expose deployment app2 --port=80 --name=app2-svc
+service/app2-svc exposed
+cachiadmin@k8s-control:~$ cat <<EOF | kubectl apply -f -
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: app1.cachi.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app1-svc
+            port:
+              number: 80
+  - host: app2.cachi.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app2-svc
+            port:
+              number: 80
+EOF
+ingress.networking.k8s.io/main-ingress created
+cachiadmin@k8s-control:~$ kubectl get ingress
+NAME           CLASS   HOSTS                               ADDRESS   PORTS   AGE
+main-ingress   nginx   app1.cachi.local,app2.cachi.local             80      11s
+cachiadmin@k8s-control:~$ curl -H "Host: app1.cachi.local" http://192.168.68.200
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, nginx is successfully installed and working.
+Further configuration is required for the web server, reverse proxy, 
+API gateway, load balancer, content cache, or other features.</p>
+
+<p>For online documentation and support please refer to
+<a href="https://nginx.org/">nginx.org</a>.<br/>
+To engage with the community please visit
+<a href="https://community.nginx.org/">community.nginx.org</a>.<br/>
+For enterprise grade support, professional services, additional 
+security features and capabilities please refer to
+<a href="https://f5.com/nginx">f5.com/nginx</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+cachiadmin@k8s-control:~$ curl -H "Host: app2.cachi.local" http://192.168.68.200
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>It works! Apache httpd</title>
+</head>
+<body>
+<p>It works!</p>
+</body>
+</html>
+cachiadmin@k8s-control:~$ kubectl run -it dns-test --image=busybox:1.28 --restart=Never -- sh
+If you don't see a command prompt, try pressing enter.
+/ # cat /etc/resolv.conf 
+search default.svc.cluster.local svc.cluster.local cluster.local
+nameserver 10.96.0.10
+options ndots:5
+/ # nslookup app1-svc
+Server:    10.96.0.10
+Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      app1-svc
+Address 1: 10.100.158.229 app1-svc.default.svc.cluster.local
+/ # nslookup kubernetes.default.svc.cluster.local
+Server:    10.96.0.10
+Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      kubernetes.default.svc.cluster.local
+Address 1: 10.96.0.1 kubernetes.default.svc.cluster.local
+/ # exit
+cachiadmin@k8s-control:~$ 
