@@ -1,0 +1,668 @@
+Last login: Thu Jul 23 11:35:55 on ttys001
+rovelazq@ROVELAZQ-M-PPV9 ~ % clop4v 
+  ___  ____  _   _  _     ____            
+ / _ \|  _ \(_) | || |   |  _ \ _ __ ___  
+| | | | |_) | | | || |_  | |_) | '__/ _ \ 
+| |_| |  __/| | |__   _| |  __/| | | (_) |
+ \___/|_|   |_|    |_|   |_|   |_|  \___/ 
+                                          
+Welcome to Orange Pi 1.0.6 Jammy with Linux 5.15.147-sun60iw2
+
+System load:   1%           	Up time:       32 min	Local users:   2            	
+Memory usage:  5% of 3.76G  	IP:	       192.168.68.108
+CPU temp:      51°C           	Usage of /:    5% of 59G    	
+
+[ 69 security updates available, 79 updates total: apt upgrade ]
+Last check: 2026-07-23 17:12
+
+[ General system configuration (beta): orangepi-config ]
+
+Last login: Thu Jul 23 17:37:05 2026 from 192.168.68.117
+root@cachi-OP4:~# sudo swapo
+swapoff  swapon   
+root@cachi-OP4:~# sudo swapo
+swapoff  swapon   
+root@cachi-OP4:~# sudo swapoff -a
+root@cachi-OP4:~# vi /etc/fstab 
+root@cachi-OP4:~# vi /etc/modules-load.d/k8s.conf
+root@cachi-OP4:~# modprobe overlay
+root@cachi-OP4:~# modprobe br_netfilter
+root@cachi-OP4:~# /etc/sysctl.d/k8s.conf
+-bash: /etc/sysctl.d/k8s.conf: No such file or directory
+root@cachi-OP4:~# vi /etc/sysctl.d/k8s.conf
+root@cachi-OP4:~# sysctl --system
+* Applying /etc/sysctl.d/10-console-messages.conf ...
+kernel.printk = 4 4 1 7
+* Applying /etc/sysctl.d/10-ipv6-privacy.conf ...
+net.ipv6.conf.all.use_tempaddr = 2
+net.ipv6.conf.default.use_tempaddr = 2
+* Applying /etc/sysctl.d/10-kernel-hardening.conf ...
+kernel.kptr_restrict = 1
+* Applying /etc/sysctl.d/10-magic-sysrq.conf ...
+kernel.sysrq = 176
+* Applying /etc/sysctl.d/10-network-security.conf ...
+net.ipv4.conf.default.rp_filter = 2
+net.ipv4.conf.all.rp_filter = 2
+* Applying /etc/sysctl.d/10-ptrace.conf ...
+* Applying /etc/sysctl.d/10-zeropage.conf ...
+vm.mmap_min_addr = 32768
+* Applying /usr/lib/sysctl.d/50-default.conf ...
+kernel.core_uses_pid = 1
+net.ipv4.conf.default.rp_filter = 2
+net.ipv4.conf.default.accept_source_route = 0
+sysctl: setting key "net.ipv4.conf.all.accept_source_route": Invalid argument
+net.ipv4.conf.default.promote_secondaries = 1
+sysctl: setting key "net.ipv4.conf.all.promote_secondaries": Invalid argument
+net.ipv4.ping_group_range = 0 2147483647
+sysctl: setting key "net.core.default_qdisc": No such file or directory
+fs.protected_hardlinks = 1
+fs.protected_symlinks = 1
+fs.protected_regular = 1
+fs.protected_fifos = 1
+* Applying /usr/lib/sysctl.d/50-pid-max.conf ...
+kernel.pid_max = 4194304
+* Applying /usr/lib/sysctl.d/99-protect-links.conf ...
+fs.protected_fifos = 1
+fs.protected_hardlinks = 1
+fs.protected_regular = 2
+fs.protected_symlinks = 1
+* Applying /etc/sysctl.d/99-sysctl.conf ...
+kernel.printk = 3 4 1 3
+vm.swappiness = 100
+* Applying /etc/sysctl.d/k8s.conf ...
+net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward = 1
+* Applying /etc/sysctl.conf ...
+kernel.printk = 3 4 1 3
+vm.swappiness = 100
+root@cachi-OP4:~# sudo apt-get update
+Hit:1 http://repo.huaweicloud.com/ubuntu-ports jammy InRelease              
+Hit:2 http://repo.huaweicloud.com/ubuntu-ports jammy-security InRelease     
+Hit:3 http://repo.huaweicloud.com/ubuntu-ports jammy-updates InRelease
+Hit:4 http://repo.huaweicloud.com/ubuntu-ports jammy-backports InRelease
+Hit:5 https://repo.huaweicloud.com/docker-ce/linux/ubuntu jammy InRelease
+Reading package lists... Done
+W: https://repo.huaweicloud.com/docker-ce/linux/ubuntu/dists/jammy/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+root@cachi-OP4:~# sudo apt-get install apt-transport-https ca-certificates curl gpg containerd
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+ca-certificates is already the newest version (20260601~22.04.1).
+curl is already the newest version (7.81.0-1ubuntu1.25).
+gpg is already the newest version (2.2.27-3ubuntu2.5).
+apt-transport-https is already the newest version (2.4.14).
+The following packages were automatically installed and are no longer required:
+  docker-ce-rootless-extras libslirp0 pigz slirp4netns
+Use 'sudo apt autoremove' to remove them.
+The following additional packages will be installed:
+  runc
+The following packages will be REMOVED:
+  containerd.io docker-ce
+The following NEW packages will be installed:
+  containerd runc
+0 upgraded, 2 newly installed, 2 to remove and 0 not upgraded.
+Need to get 33.8 MB of archives.
+After this operation, 56.3 MB disk space will be freed.
+Do you want to continue? [Y/n] y
+Get:1 http://repo.huaweicloud.com/ubuntu-ports jammy-updates/main arm64 runc arm64 1.3.4-0ubuntu1~22.04.1 [8568 kB]
+Get:2 http://repo.huaweicloud.com/ubuntu-ports jammy-security/main arm64 containerd arm64 2.2.1-0ubuntu1~22.04.2 [25.3 MB]
+Fetched 33.8 MB in 7s (4615 kB/s)                                                                                                                                                                                                                                                         
+(Reading database ... 57532 files and directories currently installed.)
+Removing docker-ce (5:29.6.2-1~ubuntu.22.04~jammy) ...
+Removing containerd.io (2.2.6-1~ubuntu.22.04~jammy) ...
+Selecting previously unselected package runc.
+(Reading database ... 57511 files and directories currently installed.)
+Preparing to unpack .../runc_1.3.4-0ubuntu1~22.04.1_arm64.deb ...
+Unpacking runc (1.3.4-0ubuntu1~22.04.1) ...
+Selecting previously unselected package containerd.
+Preparing to unpack .../containerd_2.2.1-0ubuntu1~22.04.2_arm64.deb ...
+Unpacking containerd (2.2.1-0ubuntu1~22.04.2) ...
+Setting up runc (1.3.4-0ubuntu1~22.04.1) ...
+Setting up containerd (2.2.1-0ubuntu1~22.04.2) ...
+Processing triggers for man-db (2.10.2-1) ...
+root@cachi-OP4:~# mkdir -p /etc/containerd
+root@cachi-OP4:~# containerd config default | tee /etc/containerd/config.toml
+version = 3
+root = '/var/lib/containerd'
+state = '/run/containerd'
+temp = ''
+disabled_plugins = []
+required_plugins = []
+oom_score = 0
+imports = ['/etc/containerd/conf.d/*.toml']
+
+[grpc]
+  address = '/run/containerd/containerd.sock'
+  tcp_address = ''
+  tcp_tls_ca = ''
+  tcp_tls_cert = ''
+  tcp_tls_key = ''
+  uid = 0
+  gid = 0
+  max_recv_message_size = 16777216
+  max_send_message_size = 16777216
+  tcp_tls_common_name = ''
+
+[ttrpc]
+  address = ''
+  uid = 0
+  gid = 0
+
+[debug]
+  address = ''
+  uid = 0
+  gid = 0
+  level = ''
+  format = ''
+
+[metrics]
+  address = ''
+  grpc_histogram = false
+
+[plugins]
+  [plugins.'io.containerd.cri.v1.images']
+    snapshotter = 'overlayfs'
+    disable_snapshot_annotations = true
+    discard_unpacked_layers = false
+    max_concurrent_downloads = 3
+    concurrent_layer_fetch_buffer = 0
+    image_pull_progress_timeout = '5m0s'
+    image_pull_with_sync_fs = false
+    stats_collect_period = 10
+    use_local_image_pull = false
+
+    [plugins.'io.containerd.cri.v1.images'.pinned_images]
+      sandbox = 'registry.k8s.io/pause:3.10.1'
+
+    [plugins.'io.containerd.cri.v1.images'.registry]
+      config_path = '/etc/containerd/certs.d:/etc/docker/certs.d'
+
+    [plugins.'io.containerd.cri.v1.images'.image_decryption]
+      key_model = 'node'
+
+  [plugins.'io.containerd.cri.v1.runtime']
+    enable_selinux = false
+    selinux_category_range = 1024
+    max_container_log_line_size = 16384
+    disable_apparmor = false
+    restrict_oom_score_adj = false
+    disable_proc_mount = false
+    unset_seccomp_profile = ''
+    tolerate_missing_hugetlb_controller = true
+    disable_hugetlb_controller = true
+    device_ownership_from_security_context = false
+    ignore_image_defined_volumes = false
+    netns_mounts_under_state_dir = false
+    enable_unprivileged_ports = true
+    enable_unprivileged_icmp = true
+    enable_cdi = true
+    cdi_spec_dirs = ['/etc/cdi', '/var/run/cdi']
+    drain_exec_sync_io_timeout = '0s'
+    ignore_deprecation_warnings = []
+
+    [plugins.'io.containerd.cri.v1.runtime'.containerd]
+      default_runtime_name = 'runc'
+      ignore_blockio_not_enabled_errors = false
+      ignore_rdt_not_enabled_errors = false
+
+      [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes]
+        [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc]
+          runtime_type = 'io.containerd.runc.v2'
+          runtime_path = ''
+          pod_annotations = []
+          container_annotations = []
+          privileged_without_host_devices = false
+          privileged_without_host_devices_all_devices_allowed = false
+          cgroup_writable = false
+          base_runtime_spec = ''
+          cni_conf_dir = ''
+          cni_max_conf_num = 0
+          snapshotter = ''
+          sandboxer = 'podsandbox'
+          io_type = ''
+
+          [plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc.options]
+            BinaryName = ''
+            CriuImagePath = ''
+            CriuWorkPath = ''
+            IoGid = 0
+            IoUid = 0
+            NoNewKeyring = false
+            Root = ''
+            ShimCgroup = ''
+            SystemdCgroup = false
+
+    [plugins.'io.containerd.cri.v1.runtime'.cni]
+      bin_dir = ''
+      bin_dirs = ['/opt/cni/bin']
+      conf_dir = '/etc/cni/net.d'
+      max_conf_num = 1
+      setup_serially = false
+      conf_template = ''
+      ip_pref = ''
+      use_internal_loopback = false
+
+  [plugins.'io.containerd.differ.v1.erofs']
+    mkfs_options = []
+    enable_tar_index = false
+
+  [plugins.'io.containerd.gc.v1.scheduler']
+    pause_threshold = 0.02
+    deletion_threshold = 0
+    mutation_threshold = 100
+    schedule_delay = '0s'
+    startup_delay = '100ms'
+
+  [plugins.'io.containerd.grpc.v1.cri']
+    disable_tcp_service = true
+    stream_server_address = '127.0.0.1'
+    stream_server_port = '0'
+    stream_idle_timeout = '4h0m0s'
+    enable_tls_streaming = false
+
+    [plugins.'io.containerd.grpc.v1.cri'.x509_key_pair_streaming]
+      tls_cert_file = ''
+      tls_key_file = ''
+
+  [plugins.'io.containerd.image-verifier.v1.bindir']
+    bin_dir = '/opt/containerd/image-verifier/bin'
+    max_verifiers = 10
+    per_verifier_timeout = '10s'
+
+  [plugins.'io.containerd.internal.v1.opt']
+    path = '/opt/containerd'
+
+  [plugins.'io.containerd.internal.v1.tracing']
+
+  [plugins.'io.containerd.metadata.v1.bolt']
+    content_sharing_policy = 'shared'
+    no_sync = false
+
+  [plugins.'io.containerd.monitor.container.v1.restart']
+    interval = '10s'
+
+  [plugins.'io.containerd.monitor.task.v1.cgroups']
+    no_prometheus = false
+
+  [plugins.'io.containerd.mount-handler.v1.erofs']
+
+  [plugins.'io.containerd.nri.v1.nri']
+    disable = false
+    socket_path = '/var/run/nri/nri.sock'
+    plugin_path = '/opt/nri/plugins'
+    plugin_config_path = '/etc/nri/conf.d'
+    plugin_registration_timeout = '5s'
+    plugin_request_timeout = '2s'
+    disable_connections = false
+
+    [plugins.'io.containerd.nri.v1.nri'.default_validator]
+      enable = false
+      reject_oci_hook_adjustment = false
+      reject_runtime_default_seccomp_adjustment = false
+      reject_unconfined_seccomp_adjustment = false
+      reject_custom_seccomp_adjustment = false
+      reject_namespace_adjustment = false
+      reject_sysctl_adjustment = false
+      required_plugins = []
+      tolerate_missing_plugins_annotation = ''
+
+  [plugins.'io.containerd.runtime.v2.task']
+    platforms = ['linux/arm64/v8']
+
+  [plugins.'io.containerd.service.v1.diff-service']
+    default = ['walking']
+    sync_fs = false
+
+  [plugins.'io.containerd.service.v1.tasks-service']
+    blockio_config_file = ''
+    rdt_config_file = ''
+
+  [plugins.'io.containerd.shim.v1.manager']
+    env = []
+
+  [plugins.'io.containerd.snapshotter.v1.blockfile']
+    root_path = ''
+    scratch_file = ''
+    fs_type = ''
+    mount_options = []
+    recreate_scratch = false
+
+  [plugins.'io.containerd.snapshotter.v1.btrfs']
+    root_path = ''
+
+  [plugins.'io.containerd.snapshotter.v1.devmapper']
+    root_path = ''
+    pool_name = ''
+    base_image_size = ''
+    async_remove = false
+    discard_blocks = false
+    fs_type = ''
+    fs_options = ''
+
+  [plugins.'io.containerd.snapshotter.v1.erofs']
+    root_path = ''
+    ovl_mount_options = []
+    enable_fsverity = false
+    set_immutable = false
+    default_size = ''
+
+  [plugins.'io.containerd.snapshotter.v1.native']
+    root_path = ''
+
+  [plugins.'io.containerd.snapshotter.v1.overlayfs']
+    root_path = ''
+    upperdir_label = false
+    sync_remove = false
+    slow_chown = false
+    mount_options = []
+
+  [plugins.'io.containerd.snapshotter.v1.zfs']
+    root_path = ''
+
+  [plugins.'io.containerd.tracing.processor.v1.otlp']
+
+  [plugins.'io.containerd.transfer.v1.local']
+    max_concurrent_downloads = 3
+    concurrent_layer_fetch_buffer = 0
+    max_concurrent_uploaded_layers = 3
+    check_platform_supported = false
+    config_path = ''
+    max_concurrent_unpacks = 1
+
+[cgroup]
+  path = ''
+
+[timeouts]
+  'io.containerd.timeout.bolt.open' = '0s'
+  'io.containerd.timeout.cri.defercleanup' = '1m0s'
+  'io.containerd.timeout.metrics.shimstats' = '2s'
+  'io.containerd.timeout.shim.cleanup' = '5s'
+  'io.containerd.timeout.shim.load' = '5s'
+  'io.containerd.timeout.shim.shutdown' = '3s'
+  'io.containerd.timeout.task.state' = '2s'
+
+[stream_processors]
+  [stream_processors.'io.containerd.ocicrypt.decoder.v1.tar']
+    accepts = ['application/vnd.oci.image.layer.v1.tar+encrypted']
+    returns = 'application/vnd.oci.image.layer.v1.tar'
+    path = 'ctd-decoder'
+    args = ['--decryption-keys-path', '/etc/containerd/ocicrypt/keys']
+    env = ['OCICRYPT_KEYPROVIDER_CONFIG=/etc/containerd/ocicrypt/ocicrypt_keyprovider.conf']
+
+  [stream_processors.'io.containerd.ocicrypt.decoder.v1.tar.gzip']
+    accepts = ['application/vnd.oci.image.layer.v1.tar+gzip+encrypted']
+    returns = 'application/vnd.oci.image.layer.v1.tar+gzip'
+    path = 'ctd-decoder'
+    args = ['--decryption-keys-path', '/etc/containerd/ocicrypt/keys']
+    env = ['OCICRYPT_KEYPROVIDER_CONFIG=/etc/containerd/ocicrypt/ocicrypt_keyprovider.conf']
+root@cachi-OP4:~# 
+root@cachi-OP4:~# vi /etc/containerd/config.toml 
+root@cachi-OP4:~# systemctl restart containerd
+root@cachi-OP4:~# systemctl enable containerd
+root@cachi-OP4:~# mkdir -p /etc/apt/keyrings
+root@cachi-OP4:~# curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+root@cachi-OP4:~# echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /
+root@cachi-OP4:~# sudo apt-get update
+Hit:1 http://repo.huaweicloud.com/ubuntu-ports jammy InRelease
+Hit:2 http://repo.huaweicloud.com/ubuntu-ports jammy-security InRelease
+Hit:4 http://repo.huaweicloud.com/ubuntu-ports jammy-updates InRelease     
+Hit:5 http://repo.huaweicloud.com/ubuntu-ports jammy-backports InRelease   
+Hit:6 https://repo.huaweicloud.com/docker-ce/linux/ubuntu jammy InRelease      
+Get:3 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.31/deb  InRelease [1192 B]
+Get:7 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.31/deb  Packages [20.8 kB]
+Fetched 22.0 kB in 2s (12.0 kB/s)   
+Reading package lists... Done
+W: https://repo.huaweicloud.com/docker-ce/linux/ubuntu/dists/jammy/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+root@cachi-OP4:~# apt-get install -y kubelet kubeadm kubectl
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following packages were automatically installed and are no longer required:
+  docker-ce-rootless-extras libslirp0 pigz slirp4netns
+Use 'apt autoremove' to remove them.
+The following additional packages will be installed:
+  cri-tools kubernetes-cni
+The following NEW packages will be installed:
+  cri-tools kubeadm kubectl kubelet kubernetes-cni
+0 upgraded, 5 newly installed, 0 to remove and 0 not upgraded.
+Need to get 78.9 MB of archives.
+After this operation, 307 MB of additional disk space will be used.
+Get:1 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.31/deb  cri-tools 1.31.1-1.1 [14.4 MB]
+Get:2 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.31/deb  kubeadm 1.31.14-1.1 [9965 kB]
+Get:3 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.31/deb  kubectl 1.31.14-1.1 [9832 kB]
+Get:4 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.31/deb  kubernetes-cni 1.5.1-1.1 [31.6 MB]
+Get:5 https://prod-cdn.packages.k8s.io/repositories/isv:/kubernetes:/core:/stable:/v1.31/deb  kubelet 1.31.14-1.1 [13.2 MB]
+Fetched 78.9 MB in 7s (11.1 MB/s)                                                                                                                                                                                                                                                         
+Selecting previously unselected package cri-tools.
+(Reading database ... 57575 files and directories currently installed.)
+Preparing to unpack .../cri-tools_1.31.1-1.1_arm64.deb ...
+Unpacking cri-tools (1.31.1-1.1) ...
+Selecting previously unselected package kubeadm.
+Preparing to unpack .../kubeadm_1.31.14-1.1_arm64.deb ...
+Unpacking kubeadm (1.31.14-1.1) ...
+Selecting previously unselected package kubectl.
+Preparing to unpack .../kubectl_1.31.14-1.1_arm64.deb ...
+Unpacking kubectl (1.31.14-1.1) ...
+Selecting previously unselected package kubernetes-cni.
+Preparing to unpack .../kubernetes-cni_1.5.1-1.1_arm64.deb ...
+Unpacking kubernetes-cni (1.5.1-1.1) ...
+Selecting previously unselected package kubelet.
+Preparing to unpack .../kubelet_1.31.14-1.1_arm64.deb ...
+Unpacking kubelet (1.31.14-1.1) ...
+Setting up kubectl (1.31.14-1.1) ...
+Setting up cri-tools (1.31.1-1.1) ...
+Setting up kubernetes-cni (1.5.1-1.1) ...
+Setting up kubeadm (1.31.14-1.1) ...
+Setting up kubelet (1.31.14-1.1) ...
+root@cachi-OP4:~# kubeadm join 192.168.68.101:6443 --token pyy5lv.z0tpfs0ugbtk1z9b --discovery-token-ca-cert-hash sha256:acbf380c69cca2325c9034f44481d7203078f8b2036bdfc5040ebb954ee0dde0
+[preflight] Running pre-flight checks
+	[WARNING Hostname]: hostname "cachi-op4" could not be reached
+	[WARNING Hostname]: hostname "cachi-op4": lookup cachi-op4 on 192.168.100.1:53: no such host
+error execution phase preflight: [preflight] Some fatal errors occurred:
+	[ERROR FileExisting-conntrack]: conntrack not found in system path
+[preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
+To see the stack trace of this error execute with --v=5 or higher
+root@cachi-OP4:~# 
+root@cachi-OP4:~# apt-mark hold kubelet kubeadm kubectl
+kubelet set on hold.
+kubeadm set on hold.
+kubectl set on hold.
+root@cachi-OP4:~# kubeadm join 192.168.68.101:6443 --token pyy5lv.z0tpfs0ugbtk1z9b --discovery-token-ca-cert-hash sha256:acbf380c69cca2325c9034f44481d7203078f8b2036bdfc5040ebb954ee0dde0
+[preflight] Running pre-flight checks
+	[WARNING Hostname]: hostname "cachi-op4" could not be reached
+	[WARNING Hostname]: hostname "cachi-op4": lookup cachi-op4 on 192.168.100.1:53: no such host
+error execution phase preflight: [preflight] Some fatal errors occurred:
+	[ERROR FileExisting-conntrack]: conntrack not found in system path
+[preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
+To see the stack trace of this error execute with --v=5 or higher
+root@cachi-OP4:~# kubeadm join 192.168.68.101:6443 --token pyy5lv.z0tpfs0ugbtk1z9b --discovery-token-ca-cert-hash sha256:acbf380c69cca2325c9034f44481d7203078f8b2036bdfc5040ebb954ee0dde0 --v=5
+I0723 18:11:44.521147   18183 join.go:419] [preflight] found NodeName empty; using OS hostname as NodeName
+I0723 18:11:44.521735   18183 initconfiguration.go:123] detected and using CRI socket: unix:///var/run/containerd/containerd.sock
+[preflight] Running pre-flight checks
+I0723 18:11:44.522093   18183 preflight.go:93] [preflight] Running general checks
+I0723 18:11:44.533634   18183 checks.go:278] validating the existence of file /etc/kubernetes/kubelet.conf
+I0723 18:11:44.533735   18183 checks.go:278] validating the existence of file /etc/kubernetes/bootstrap-kubelet.conf
+I0723 18:11:44.533799   18183 checks.go:102] validating the container runtime
+I0723 18:11:44.535537   18183 checks.go:634] validating whether swap is enabled or not
+I0723 18:11:44.535739   18183 checks.go:368] validating the presence of executable crictl
+I0723 18:11:44.535830   18183 checks.go:368] validating the presence of executable conntrack
+I0723 18:11:44.535969   18183 checks.go:368] validating the presence of executable ip
+I0723 18:11:44.536028   18183 checks.go:368] validating the presence of executable iptables
+I0723 18:11:44.536084   18183 checks.go:368] validating the presence of executable mount
+I0723 18:11:44.536134   18183 checks.go:368] validating the presence of executable nsenter
+I0723 18:11:44.536182   18183 checks.go:368] validating the presence of executable ethtool
+I0723 18:11:44.536223   18183 checks.go:368] validating the presence of executable tc
+I0723 18:11:44.536273   18183 checks.go:368] validating the presence of executable touch
+I0723 18:11:44.536324   18183 checks.go:511] running all checks
+I0723 18:11:44.556411   18183 checks.go:399] checking whether the given node name is valid and reachable using net.LookupHost
+	[WARNING Hostname]: hostname "cachi-op4" could not be reached
+	[WARNING Hostname]: hostname "cachi-op4": lookup cachi-op4 on 192.168.100.1:53: no such host
+I0723 18:11:44.567868   18183 checks.go:600] validating kubelet version
+I0723 18:11:44.712490   18183 checks.go:128] validating if the "kubelet" service is enabled and active
+I0723 18:11:44.746380   18183 checks.go:201] validating availability of port 10250
+I0723 18:11:44.746973   18183 checks.go:278] validating the existence of file /etc/kubernetes/pki/ca.crt
+I0723 18:11:44.747030   18183 checks.go:428] validating if the connectivity type is via proxy or direct
+I0723 18:11:44.747132   18183 checks.go:327] validating the contents of file /proc/sys/net/ipv4/ip_forward
+[preflight] Some fatal errors occurred:
+	[ERROR FileExisting-conntrack]: conntrack not found in system path
+[preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
+error execution phase preflight
+k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow.(*Runner).Run.func1
+	k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow/runner.go:260
+k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow.(*Runner).visitAll
+	k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow/runner.go:446
+k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow.(*Runner).Run
+	k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow/runner.go:232
+k8s.io/kubernetes/cmd/kubeadm/app/cmd.newCmdJoin.func1
+	k8s.io/kubernetes/cmd/kubeadm/app/cmd/join.go:183
+github.com/spf13/cobra.(*Command).execute
+	github.com/spf13/cobra@v1.8.1/command.go:985
+github.com/spf13/cobra.(*Command).ExecuteC
+	github.com/spf13/cobra@v1.8.1/command.go:1117
+github.com/spf13/cobra.(*Command).Execute
+	github.com/spf13/cobra@v1.8.1/command.go:1041
+k8s.io/kubernetes/cmd/kubeadm/app.Run
+	k8s.io/kubernetes/cmd/kubeadm/app/kubeadm.go:47
+main.main
+	k8s.io/kubernetes/cmd/kubeadm/kubeadm.go:25
+runtime.main
+	runtime/proc.go:283
+runtime.goexit
+	runtime/asm_arm64.s:1223
+root@cachi-OP4:~# apt-get install -y conntrack
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following packages were automatically installed and are no longer required:
+  docker-ce-rootless-extras libslirp0 pigz slirp4netns
+Use 'apt autoremove' to remove them.
+The following NEW packages will be installed:
+  conntrack
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+Need to get 32.4 kB of archives.
+After this operation, 103 kB of additional disk space will be used.
+Get:1 http://repo.huaweicloud.com/ubuntu-ports jammy/main arm64 conntrack arm64 1:1.4.6-2build2 [32.4 kB]
+Fetched 32.4 kB in 1s (26.4 kB/s)    
+Selecting previously unselected package conntrack.
+(Reading database ... 57629 files and directories currently installed.)
+Preparing to unpack .../conntrack_1%3a1.4.6-2build2_arm64.deb ...
+Unpacking conntrack (1:1.4.6-2build2) ...
+Setting up conntrack (1:1.4.6-2build2) ...
+Processing triggers for man-db (2.10.2-1) ...
+root@cachi-OP4:~# vi /etc/hosts
+root@cachi-OP4:~# kubeadm join 192.168.68.101:6443 --token pyy5lv.z0tpfs0ugbtk1z9b --discovery-token-ca-cert-hash sha256:acbf380c69cca2325c9034f44481d7203078f8b2036bdfc5040ebb954ee0dde0 
+[preflight] Running pre-flight checks
+[preflight] Reading configuration from the cluster...
+[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[kubelet-start] Starting the kubelet
+[kubelet-check] Waiting for a healthy kubelet at http://127.0.0.1:10248/healthz. This can take up to 4m0s
+[kubelet-check] The kubelet is healthy after 1.502360717s
+[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap
+
+This node has joined the cluster:
+* Certificate signing request was sent to apiserver and a response was received.
+* The Kubelet was informed of the new secure connection details.
+
+Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
+
+root@cachi-OP4:~# exit
+logout
+Connection to 192.168.68.108 closed.
+rovelazq@ROVELAZQ-M-PPV9 ~ % clctrl  
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-134-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Thu Jul 23 06:16:33 PM UTC 2026
+
+  System load:  0.13               Processes:              192
+  Usage of /:   73.5% of 13.67GB   Users logged in:        1
+  Memory usage: 31%                IPv4 address for ens18: 192.168.68.101
+  Swap usage:   0%
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+47 updates can be applied immediately.
+10 of these updates are standard security updates.
+To see these additional updates run: apt list --upgradable
+
+1 additional security update can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+*** System restart required ***
+Last login: Thu Jul 23 18:08:31 2026 from 192.168.68.117
+cachiadmin@k8s-control:~$ kubectl get nodes
+NAME          STATUS     ROLES           AGE   VERSION
+cachi-op4     NotReady   <none>          29s   v1.31.14
+k8s-control   Ready      control-plane   19d   v1.31.0
+k8s-netbook   Ready      <none>          14d   v1.31.0
+k8s-worker1   Ready      <none>          19d   v1.31.0
+k8s-worker2   Ready      <none>          19d   v1.31.0
+cachiadmin@k8s-control:~$ kubectl get nodes -w
+NAME          STATUS     ROLES           AGE   VERSION
+cachi-op4     NotReady   <none>          71s   v1.31.14
+k8s-control   Ready      control-plane   19d   v1.31.0
+k8s-netbook   Ready      <none>          14d   v1.31.0
+k8s-worker1   Ready      <none>          19d   v1.31.0
+k8s-worker2   Ready      <none>          19d   v1.31.0
+k8s-worker2   Ready      <none>          19d   v1.31.0
+cachi-op4     Ready      <none>          87s   v1.31.14
+cachi-op4     Ready      <none>          87s   v1.31.14
+cachi-op4     Ready      <none>          89s   v1.31.14
+^Ccachiadmin@k8s-control:~$ kubectl get nodes
+NAME          STATUS   ROLES           AGE    VERSION
+cachi-op4     Ready    <none>          104s   v1.31.14
+k8s-control   Ready    control-plane   19d    v1.31.0
+k8s-netbook   Ready    <none>          14d    v1.31.0
+k8s-worker1   Ready    <none>          19d    v1.31.0
+k8s-worker2   Ready    <none>          19d    v1.31.0
+cachiadmin@k8s-control:~$ kubectl get nodes -L kubernetes.io/arch
+NAME          STATUS   ROLES           AGE     VERSION    ARCH
+cachi-op4     Ready    <none>          3m59s   v1.31.14   arm64
+k8s-control   Ready    control-plane   19d     v1.31.0    amd64
+k8s-netbook   Ready    <none>          14d     v1.31.0    amd64
+k8s-worker1   Ready    <none>          19d     v1.31.0    amd64
+k8s-worker2   Ready    <none>          19d     v1.31.0    amd64
+cachiadmin@k8s-control:~$ cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arm-only-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: arm-test
+  template:
+    metadata:
+      labels:
+        app: arm-test
+    spec:
+      # This is the magic block!
+      nodeSelector:
+        kubernetes.io/arch: arm64
+      containers:
+      - name: web-server
+        image: nginx:alpine
+EOF
+deployment.apps/arm-only-deployment created
+cachiadmin@k8s-control:~$ kubectl get pods -l app=arm-test -o wide
+NAME                                   READY   STATUS    RESTARTS   AGE   IP               NODE        NOMINATED NODE   READINESS GATES
+arm-only-deployment-7bc9894967-662vm   1/1     Running   0          38s   192.168.214.68   cachi-op4   <none>           <none>
+arm-only-deployment-7bc9894967-st2mz   1/1     Running   0          38s   192.168.214.67   cachi-op4   <none>           <none>
+arm-only-deployment-7bc9894967-t2mh7   1/1     Running   0          38s   192.168.214.66   cachi-op4   <none>           <none>
+cachiadmin@k8s-control:~$ kubectl delete deployment arm-only-deployment
+deployment.apps "arm-only-deployment" deleted
+cachiadmin@k8s-control:~$ 
